@@ -1,6 +1,6 @@
 ---
-title: "Sample Report - Data Science Capstone"
-author: "Student name"
+title: "STA 6257 - Data Science Capstone"
+author: "Group Random Forest"
 date: '`r Sys.Date()`'
 format:
   html:
@@ -19,7 +19,9 @@ editor:
 
 ## Introduction
 
-### What is "mehtod"?
+### What is random forest?
+
+Random Forest
 
 This is an introduction to Kernel regression, which is a non-parametric
 estimator that estimates the conditional expectation of two variables
@@ -97,6 +99,7 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 ### Statistical Modeling
 
 ```{r}
+
 
 ```
 
