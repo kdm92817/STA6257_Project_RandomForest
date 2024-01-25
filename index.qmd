@@ -23,81 +23,106 @@ editor:
 
 Random forests are considered an "out of the box" machine learning
 algorithm and are made up of a collection of decision trees to create a
-"forest" (Breiman 2001). This approach is useful in prediction and
+"forest" [@breiman2001random]. This approach is useful in prediction and
 regression analysis.
 
 Random forests are constructed on the fundamental principles found
 bagging, which introduces a random component in to the tree building
-process that reduces the variance of a single tree\'s prediction and
+process that reduces the variance of a single tree's prediction and
 improves predictive performance. However, the trees in bagging are not
-completely independent of each other since all the original
-predictorsare considered at every split of every tree. Rather, trees
-from different bootstrap samples typically have similar structure to
-each other due to underlying relationships.
+completely independent of each other since all the original predictors
+are considered at every split of every tree. Rather, trees from
+different bootstrap samples typically have similar structure to each
+other due to underlying relationships.
 
 ### Literature Review
 
 This section is going to cover the literature review...
 
+## Background
+
+### **Decision trees** 
+
+Decision trees start with a basic question, such as, \"Should I surf?\"
+From there, you can ask a series of questions to determine an answer,
+such as, \"Is it a long period swell?\" or \"Is the wind blowing
+offshore?\". These questions make up the decision nodes in the tree,
+acting as a means to split the data. Each question helps an individual
+to arrive at a final decision, which would be denoted by the leaf node.
+Observations that fit the criteria will follow the \"Yes\" branch and
+those that don\'t will follow the alternate path.  Decision trees seek
+to find the best split to subset the data, and they are typically
+trained through the Classification and Regression Tree (CART) algorithm.
+Metrics, such
+as Gini impurity, information gain, or mean square error (MSE), can be
+used to evaluate the quality of the split.  
+
+This decision tree is an example of a classification problem, where the
+class labels are "" and "."
+
+-   Will rework and tailor example to dataset.
+
+### **Applications** 
+
+### **Limitations/Challenges**
+
+While decision trees are common supervised learning algorithms, they can
+be prone to problems, such as bias and overfitting. However, when
+multiple decision trees form an ensemble in the random forest algorithm,
+they predict more accurate results, particularly when the individual
+trees are uncorrelated with each other.
+
+-   Time-consuming process: Since random forest algorithms can handle
+    large data sets, they can be provide more accurate predictions but
+    can be slow to process data as they are computing data for each
+    individual decision tree.
+
+-   Requires more resources
+
+-   More complex: The prediction of a single decision tree is
+    easier to interpret when compared to a forest of them.
+
 ## Methods
+
+### **Ensemble Method**
+
+Ensemble learning methods are made up of a set of classifiers (i.e.,
+decision trees), and their predictions are aggregated to identify the
+most popular result. The most well-known ensemble methods are bagging,
+also known as bootstrap aggregation, and boosting. The bagging method;
+in this method, a random sample of data in a training set is selected
+with replacement---meaning that the individual data
+points can be chosen more than once. After several data samples are
+generated, these models are then trained independently, and depending on
+the type of task---i.e. regression or classification---the average or
+majority of those predictions yield a more accurate estimate. This
+approach is commonly used to reduce variance.
+
+### **Random forest algorithm**
 
 Steps to Build a Random Forest
 
--   Randomly select \"K\" features from total \"m\" features
-    where k \< m
+-   Randomly select "K" features from total "m" features where k \< m
 
--   Among the \"K\" features, calculate the node \"d\" using the
-    best split point
+-   Among the "K" features, calculate the node "d" using the best split
+    point
 
--   Split the node into daughter nodes using the best split
-    method
+-   Split the node into daughter nodes using the best split method
 
--   Repeat the previous steps until you reach the \"l\" number
-    of nodes
+-   Repeat the previous steps until you reach the "l" number of nodes
 
--   Build a forest by repeating all steps for \"n\" number
-    times to create \"n\" number of trees
+-   Build a forest by repeating all steps for "n" number times to create
+    "n" number of trees
 
 After the random forest trees and classifiers are created, predictions
 can be made using the following steps:
 
--   Run the test data through the rules of each decision
-    tree to predict the outcome and then store that predicted target
-    outcome
+-   Run the test data through the rules of each decision tree to predict
+    the outcome and then store that predicted target outcome
 
 -   Calculate the votes for each of the predicted targets
 
--   The most highly voted predicted target is the final
-    prediction 
-
-The basic algorithm for a regression random forest can be generalized to
-the
-following:
-
-1.  Find data set
-
-2.  Select number of trees to build (ntrees)
-
-3.  for i = 1 to ntrees do
-
-4.  Generate a bootstrap sample of the original data
-
-5.  Grow a regression tree to the bootstrapped data
-
-6.  For each split:
-
-7.  Select m variables at random from all p variables
-
-8.  Pick the best variable/split-point among the m
-
-9.  Split the node into two child nodes
-
-10\. End
-
-11\. Use tree model stopping criteria to determine when a tree is
-complete (but do not prune)
-
-12\. End
+-   The most highly voted predicted target is the final prediction 
 
 \--
 
@@ -157,9 +182,9 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 
 ```
 
-### Statistical Modeling
+### Statistical Modeling 
 
-## Tuning
+### Tuning
 
 An approach which considers hyperparameters and involves tuning the
 number of candidate variables to select from at each split. However,
@@ -187,9 +212,9 @@ hyperparameters should be present:
 
     -   Controls complexity
 
--    maxnodes: maximum number of terminal nodes
+-   maxnodes: maximum number of terminal nodes
 
-    -    More nodes results in deeper, more complex trees, while fewer
+    -   More nodes results in deeper, more complex trees, while fewer
         nodes produce shallower trees.
 
 ```{r}
@@ -203,12 +228,20 @@ Conclusion here...
 
 ## References
 
-Biau G, Scornet E. 2016. A random forest guided tour. TEST. 25:197--227.
+\@article{breiman2001random,
 
-Breiman, Leo. 2001. Random forests. Machine Learning. 45:5-32.
+  title={Random forests},
 
-Segal MR. 2004. Machine learning benchmarks and random forest
-regression. UCSF:
-Center for Bioinformatics and Molecular Biostatistics*.*\[accessed 2024
-Jan 16\]. [Machine Learning Benchmarks and Random Forest Regression
-(escholarship.org)](https://escholarship.org/uc/item/35x3v9t4#main)
+  author={Breiman, Leo},
+
+  journal={Machine learning},
+
+  volume={45},
+
+  pages={5\--32},
+
+  year={2001},
+
+  publisher={Springer}
+
+}
