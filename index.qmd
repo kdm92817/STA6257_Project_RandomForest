@@ -24,46 +24,22 @@ editor:
 Random forests are considered an "out of the box" machine learning
 algorithm and are made up of a collection of decision trees to create a
 "forest". This approach aims to improve prediction accuracy and reduce
-risk of overfitting by combining multiple decision trees.
+risk of overfitting by combining multiple decision trees to obtain a
+single result.
 
 In a Random Forest model, a set of decision trees are created using a
 random subset of the training data and a random set of features at each
 split. Each tree in the forest is trained independently, and the final
 prediction is made by aggregating the predictions of all the trees in
-the forest. The aggregation method varies depending on the task at hand.
+the forest.
 
-For classification, the finalprediction is typically made by taking the
+The aggregation method varies depending on the task at hand. For
+classification, the final prediction is typically made by taking the
 majority vote of the individual tree predictions, while in regression,
 the final prediction is made by taking the mean of the individual tree
 predictions.
 
-### Literature Review
-
-Biau and Scornet (2016) provide an overview into the methodology,
-practice, and recent developments of the random forest algorithm. Basic
-principles are discussed, and mathematical support for the algorithm is
-provided. They delve into the importance of variable selection and tree
-parameters when performing predictive analysis.
-
-Segal (2004) offers a clear definition and practical application of
-random forest regression. Two different profiles are established using
-random forest methodology, and predictive errors are identified.
-Mathematical equations lend support to the regression analysis. Segal
-(2004) explains that one of guiding forces in random forest regression
-is to increase variance by decreasing correlation.
-
-Lingjun et al. (2019) discuss uses and advantages of tree-based machine
-learning algorithms. They highlight the key benefits of these models
-over classical regression analyses, and they expound upon the predictive
-capabilities as a strategy for data-based decision making. A simulation
-experiment is outlined to allow for greater understanding of the process
-and its corresponding results.
-
-Jaiswal & Samikannu (2017) details the uses and capabilities of the
-random forest model. They highlight the computation tools it employs to
-overcome obstacles, such as missing data, outliers, noisy data, and/or
-classification problems. The importance of the Gini index is described
-as a measure of accuracy of the decision trees.
+## Literature Review
 
 Biau (2012) delves into the statistical components and mathematical
 support of the random forest model. Several theorems are outlined in
@@ -73,12 +49,38 @@ inequalities and support the propositions. He touches in the importance
 of variable selection and the increasing adaptability found within the
 random forest algorithm.
 
+Biau and Scornet (2016) provide an overview into the methodology,
+practice, and recent developments of the random forest algorithm. Basic
+principles are discussed, and mathematical support for the algorithm is
+provided. They delve into the importance of variable selection and tree
+parameters when performing predictive analysis.
+
+Jaiswal & Samikannu (2017) detail the uses and capabilities of the
+random forest model. They highlight the computation tools it employs to
+overcome obstacles, such as missing data, outliers, noisy data, and/or
+classification problems. The importance of the Gini index is described
+as a measure of accuracy of the decision trees.
+
 Liaw and Wiener (2002) discuss the introduction of the random forest
 algorithm by L. Breiman, in addition to offering examples of its
 application in the R interface. They discuss how the algorithm draws
 bootstrap samples and estimates rates of error. It is noted that the
 production of multiple trees is crucial in obtaining variable importance
 and measures of proximity.
+
+Lingjun et al. (2019) discuss uses and advantages of tree-based machine
+learning algorithms. They highlight the key benefits of these models
+over classical regression analyses, and they expound upon the predictive
+capabilities as a strategy for data-based decision making. A simulation
+experiment is outlined to allow for greater understanding of the process
+and its corresponding results.
+
+Segal (2004) offers a clear definition and practical application of
+random forest regression. Two different profiles are established using
+random forest methodology, and predictive errors are identified.
+Mathematical equations lend support to the regression analysis. Segal
+(2004) explains that one of guiding forces in random forest regression
+is to increase variance by decreasing correlation.
 
 ## Background
 
@@ -90,9 +92,10 @@ From there, you can ask a series of questions to determine an answer.
 
 These questions make up the decision nodes in the tree, acting as a
 means to split the data. Each question aids in the arrival of a final
-decision, which would be denoted by the leaf node. Observations that fit
-the criteria will follow the "Yes" branch, and those that do not will
-follow the alternate path.
+decision, which would be denoted by the leaf node.
+
+Observations that fit the criteria will follow the "Yes" branch, and
+those that do not will follow the alternate path.
 
 Decision trees seek to find the best split to subset the data, and they
 are typically trained through the Classification and Regression Tree
@@ -107,21 +110,36 @@ class labels are "" and "."
 
 ### **Applications**
 
-### **Limitations/Challenges**
+#### **Benefits/Advantages**
 
-While decision trees are common supervised learning algorithms, they can
-be prone to problems, such as bias and overfitting. However, when
-multiple decision trees form an ensemble in the random forest algorithm,
-they predict more accurate results, particularly when the individual
-trees are uncorrelated with each other.
+-   Capable of performing both classification and regression tasks.
+-   Capable of handling large datasets with high dimensionality.
+-   Decreased training time compared to other algorithms.
+-   Promotes predictive ability with high accuracy, even with large
+    datasets.
+-   Can solve problems internally and still maintain accuracy, even when
+    a large proportion of data is missing.
+-   Enhances the accuracy of the model and prevents issues in
+    overfitting.
+-   Can be used as a feature selection tool using its variable
+    importance plot.
 
--   Time-consuming process: Since random forest algorithms can handle
-    large data sets, they can be provide more accurate predictions.
-    However, the process can be slow as they are computing data for each
-    individual decision tree.
+#### **Limitations/Challenges**
+
+-   Prone to problems, such as bias and overfitting.
+    -   However, when multiple decision trees form an ensemble in the
+        random forest algorithm, they predict results with greater
+        accuracy, particularly when the individual trees are
+        uncorrelated with each other.
+-   Time-consuming
+    -   Since random forest algorithms can handle large data sets, they
+        can be provide more accurate predictions. However, the process
+        can be slow as they are computing data for each individual
+        decision tree.
 -   Requires more resources
--   More complex: The prediction of a single decision tree is easier to
-    interpret when compared to a forest of them.
+-   More complex
+    -   The prediction of a single decision tree is easier to interpret
+        when compared to a forest of them.
 
 ## Methods
 
@@ -129,19 +147,25 @@ trees are uncorrelated with each other.
 
 Ensemble learning methods are made up of a set of classifiers (i.e.,
 decision trees), and their predictions are aggregated to identify the
-most popular result. The most well-known ensemble methods are bagging,
-also known as bootstrap aggregation, and boosting. In the bagging
-method, a random sample of data in a training set is selected with
-replacement, meaning the individual data points can be chosen more than
-once. After several data samples are generated, these models are then
-trained independently, and depending on the type of task---i.e.,
-regression or classification---the average or majority of those
-predictions yield a more accurate estimate. This approach is commonly
-used to reduce variance.
+most popular result.
+
+-   **Bagging**
+
+    -   Also known as bootstrap aggregation
+    -   A random sample of data in a training set is selected with
+        replacement, meaning the individual data points can be chosen
+        more than once.
+    -   Models are trained independently.
+    -   Final ouput is based on majority voting.
+    -   This approach helps to reduce variance.
+
+-   **Boosting**
+
+    -   Combines weak learners into strong learners by creating
+        sequential models such that the final model has the highest
+        accuracy.
 
 ### **Random forest algorithm**
-
-![](images/image-2130503952.png)
 
 Steps to Build a Random Forest
 
@@ -160,6 +184,13 @@ can be made using the following steps:
     the outcome and then store that predicted target outcome
 -   Calculate the votes for each of the predicted targets
 -   The most highly voted predicted target is the final prediction 
+
+### **Assumptions**
+
+-   Some of the actual values in the feature variable of the dataset
+    should be present so the classifier can predict accurate results.
+
+-   The predictions from each tree must have very low correlations.
 
 \--
 
@@ -221,7 +252,7 @@ ggplot1 = murders %>% ggplot(mapping = aes(x=population/10^6, y=total))
 
 ### Statistical Modeling
 
-### Tuning
+#### Tuning
 
 An approach which considers hyperparameters and involves tuning the
 number of candidate variables to select from at each split. However,
