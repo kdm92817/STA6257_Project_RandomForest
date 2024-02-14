@@ -193,9 +193,42 @@ can be made using the following steps:
 
 #### Dataset
 
-![](images/image-1377458021.png)
+Data Source: Mendeley Data
 
+\[Species data used in Random Forest modelling to determine predictors
+of extinction\](https://data.mendeley.com/datasets/tc6syk8vwf/1)
 
+**Description**
+
+Data was extracted from the South African Red List database to compile a
+profile for plant extinctions (SANBI 2021). South Africa offers a wide
+array of biodiversity and estimates over 22,000 plant taxa. The
+International Union for Conservation of Nature\'s (IUCN) Red List of
+Threatened Species provides a standardized method to document and assess
+extinctions (IUCN 2023). Species are classified into one of the
+following groups: Extinct (EX), Extinct in the wild (EW), Critically
+endangered possibly extinct (CR PE), Critically endangered (CR),
+Endangered (EN), Vulnerable (VU), Near threatened (NT), Conservation
+dependent (CD), Least concern (LC), and Data deficient (DD).
+
+Plants are an essential component to an ecosystem\'s functionality, so
+it is critical to evaluate drivers of extinction and determine methods
+of prevention. To examine potential indicators for extinctions, extinct,
+threatened, and non-threatened taxa are compared to identify and/or
+distinguish traits that may be associated with risk or vulnerability.
+The final dataset comprises 842 extant taxa, 33 Extinct taxa, and 69
+Possibly Extinct (CR PE) taxa, to total 944 species
+\[\@van2023species\].
+
+**Table 1** organizes and summarizes the explanatory variables. 
+
+The response variable is Extinction risk status grouped into Extinct,
+Threatened (CR, EN, VU) and Not-Threatened (NT, LC, Critically Rare,
+Rare).
+
+**Table 1.**
+
+![](images/image-613595486.png)\
 
 ```{r, warning=FALSE, echo=T, message=FALSE}
 # loading packages 
