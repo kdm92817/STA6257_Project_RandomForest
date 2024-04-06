@@ -340,7 +340,7 @@ The table [@vanderColff2023] below organizes and summarizes the
 explanatory variables.
 
 | Class                  | Predictor Variables | Description                                                                                                                                                                                                                                                             |
-|------------|------------|------------------------------------------------|
+|------------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Human pressures**    | Habitat loss        | Conversion, fragmentation, and/or elimination of habitat. e.g., logging, wood harvesting, livestock farming, urban development.                                                                                                                                         |
 |                        | Habitat degradation | Alteration of natural habitats necessary for species survival resulting in reduced functionality e.g., fire suppression, droughts.                                                                                                                                      |
 |                        | Invasive species    | Impacts of alien species on natives through different mechanisms e.g. alteration of soil chemistry, resource competition.                                                                                                                                               |
@@ -352,7 +352,6 @@ explanatory variables.
 |                        | Growth form (GF)    | One of 14 distinct forms: Parasitic plant, Tree, Shrub, Suffrutex, Herb, Lithophyte, Succulent, Graminoid, Geophyte, Climber, Carnivorous, Cyperoid, Creeper, Epiphyte.                                                                                                 |
 | **Distribution state** | Biomes              | One of nine biomes present in South Africa: Fynbos, Grassland, Succulent Karoo, Albany Thicket, Savanna, Forest, Nama Karoo, Desert, Indian Ocean Coastal Belt. Note: if a taxon was found in multiple biomes, it was marked as generalist.                             |
 |                        | Range size          | All species range sizes are based on the standard measure of Extent of Occurrence (EOO), a parameter defined as the shortest continuous imaginary boundary that can be drawn to encompass all the known, inferred, or projected sites of present occurrence of a taxon. |
-
 
 ```{r}
 library(caret)
@@ -398,44 +397,89 @@ species_test <- subset(data2, split2 == "FALSE")
 
 ```
 
-
 ### Statistical Modeling
 
 # Statistical Modeling
+
 ## Packages
-The R packages utilized for running the statistical modeling for the Random Forest algorithm were **readr**, **plyr**, **ipred**, **caret**, **caTools**, **randomForest**, **ROSE**. 
-- readr: Part of the tidyverse, readr is designed for reading rectangular data, particularly CSVs (comma-separated values) and other delimited types of text files. It's known for its speed and for providing more informative error messages compared to base R functions like read.csv. It also converts data into tibbles, which are a modern take on data frames.
 
-- **plyr**: This package is used for splitting, applying, and combining data. plyr is known for its capability to handle different data types (arrays, lists, data frames, etc.) and apply functions to each element of the split data, then combine the results. Note that plyr is largely superseded by dplyr (also part of tidyverse), which is more efficient especially for large datasets.
+The R packages utilized for running the statistical modeling for the
+Random Forest algorithm were **readr**, **plyr**, **ipred**, **caret**,
+**caTools**, **randomForest**, **ROSE**. - readr: Part of the tidyverse,
+readr is designed for reading rectangular data, particularly CSVs
+(comma-separated values) and other delimited types of text files. It's
+known for its speed and for providing more informative error messages
+compared to base R functions like read.csv. It also converts data into
+tibbles, which are a modern take on data frames.
 
-- **ipred**: Standing for "Improved Predictors", ipred provides functions for predictive modeling. It includes methods for bagging (Bootstrap Aggregating), which helps improve the stability and accuracy of machine learning algorithms, particularly for decision trees.
+-   **plyr**: This package is used for splitting, applying, and
+    combining data. plyr is known for its capability to handle different
+    data types (arrays, lists, data frames, etc.) and apply functions to
+    each element of the split data, then combine the results. Note that
+    plyr is largely superseded by dplyr (also part of tidyverse), which
+    is more efficient especially for large datasets.
 
-- **caret**: The caret package (short for Classification And REgression Training) is a comprehensive framework for building machine learning models in R. It simplifies the process of model training, tuning, and predicting by providing a unified interface for various machine learning algorithms.
+-   **ipred**: Standing for "Improved Predictors", ipred provides
+    functions for predictive modeling. It includes methods for bagging
+    (Bootstrap Aggregating), which helps improve the stability and
+    accuracy of machine learning algorithms, particularly for decision
+    trees.
 
-- **caTools**: This package contains several tools for handling data, including functions for reading/writing Binary Large Objects (BLOBs), moving window statistics, and splitting data into training/testing sets. It's often used for its simple and effective method for creating reproducible train/test splits.
+-   **caret**: The caret package (short for Classification And
+    REgression Training) is a comprehensive framework for building
+    machine learning models in R. It simplifies the process of model
+    training, tuning, and predicting by providing a unified interface
+    for various machine learning algorithms.
 
-- **randomForest**: As the name suggests, this package is used for implementing the Random Forest algorithm for classification and regression tasks. Random Forest is an ensemble learning method that operates by constructing a multitude of decision trees and outputting the mode of the classes (classification) or mean prediction (regression) of the individual trees.
+-   **caTools**: This package contains several tools for handling data,
+    including functions for reading/writing Binary Large Objects
+    (BLOBs), moving window statistics, and splitting data into
+    training/testing sets. It's often used for its simple and effective
+    method for creating reproducible train/test splits.
 
-- **ROSE**: Standing for Random OverSampling Examples, the ROSE package is used to deal with imbalanced datasets in binary classification problems. It generates synthetic samples in a two-class problem to balance the class distribution, using smoothed bootstrapping. This helps improve the performance of classification models on imbalanced datasets.
+-   **randomForest**: As the name suggests, this package is used for
+    implementing the Random Forest algorithm for classification and
+    regression tasks. Random Forest is an ensemble learning method that
+    operates by constructing a multitude of decision trees and
+    outputting the mode of the classes (classification) or mean
+    prediction (regression) of the individual trees.
 
+-   **ROSE**: Standing for Random OverSampling Examples, the ROSE
+    package is used to deal with imbalanced datasets in binary
+    classification problems. It generates synthetic samples in a
+    two-class problem to balance the class distribution, using smoothed
+    bootstrapping. This helps improve the performance of classification
+    models on imbalanced datasets.
 
 ## Data Preparation
-Encode the 15 columns, with 'group' categorized into 1, 2, and 3. 'Yes' should be encoded as 1, 'No' as 0, and other categories should be numbered starting from 1. In the first column, replace the "-" with a ".".
+
+Encode the 15 columns, with 'group' categorized into 1, 2, and 3. 'Yes'
+should be encoded as 1, 'No' as 0, and other categories should be
+numbered starting from 1. In the first column, replace the "-" with a
+".".
 
 ### Original Dataset Preview
 
 ```{r}
 kable(head(data2, 10))
 ```
+
 ### Encoding Dataset Prview
 
 ```{r, warning=FALSE, echo=TRUE}
 ```
-Split the dataset into a training set and a test set with a ratio of 7:3. Perform class imbalance handling on the training set using the ROSE library, aiming for an equal data quantity among classes, represented as 1:1:1.
 
-Given a minority class sample point x, we find its k nearest neighbors. Then, we randomly select one of these neighbors, denoted as z, and construct a new data point y that lies on the line segment between x and z:
+Split the dataset into a training set and a test set with a ratio of
+7:3. Perform class imbalance handling on the training set using the ROSE
+library, aiming for an equal data quantity among classes, represented as
+1:1:1.
 
-> y = x + λ * (z - x)
+Given a minority class sample point x, we find its k nearest neighbors.
+Then, we randomly select one of these neighbors, denoted as z, and
+construct a new data point y that lies on the line segment between x and
+z:
+
+> y = x + λ \* (z - x)
 
 Here, λ is a random number between 0 and 1.
 
