@@ -1,6 +1,6 @@
 ---
-title: "STA 6257 - Data Science Capstone"
-author: "Group Random Forest"
+title: "Predicting Plant Exctinctions in South Africa: A Random Forest Approach"
+author: "Kristen Monaco"
 date: '`r Sys.Date()`'
 format:
   html:
@@ -34,78 +34,238 @@ of variable importance. Random Forest has gained popularity due to its
 ability to handle complex datasets and produce reliable predictions in
 various domains.
 
+### The Problem
+
+TODO
+
 ## Literature Review
 
-Biau (2012) delves into the statistical components and mathematical
-support of the random forest model. Several theorems are outlined in
-which to display the consistency of the model. Then, proof is provided
-for those outcomes, with worked out equations that adjust for
-inequalities and support the propositions. He touches in the importance
-of variable selection and the increasing adaptability found within the
-random forest algorithm.
+In the paper "Analysis of a Random Forests Model", Biau
+\[\@biau2012analysis\] provides an in-depth analysis of the Random
+Forests model. The author delves into the statistical components and
+mathematical support, as well as investigates various aspects of the
+Random Forests, such as its consistency, convergence rates, and the
+effect of the number of trees on performance. He touches on the
+importance of variable selection and the increasing adaptability found
+within the random forest algorithm. Biau provides theoretical insights
+into the behavior of Random Forests, shedding light on its robustness
+and effectiveness as a machine learning algorithm.
 
-Biau and Scornet (2016) provide an overview into the methodology,
-practice, and recent developments of the random forest algorithm. Basic
-principles are discussed, and mathematical support for the algorithm is
-provided. They delve into the importance of variable selection and tree
-parameters when performing predictive analysis.
+In "A Random Forest Guided Tour", Biau and Scornet \[\@biau2016random\]
+present an extensive exploration of Random Forests, a popular machine
+learning algorithm. The paper serves as a comprehensive guide, covering
+aspects of theoretical foundations, methodology, model evaluation, and
+empirical performance. They discuss the inner workings of Random
+Forests, including topics such as tree construction, feature selection,
+and ensemble learning, which aid in predictive analysis. Overall, the
+paper serves as a valuable resource for those interested in
+understanding and utilizing Random Forests in their machine learning
+tasks.
 
-Jaiswal & Samikannu (2017) detail the uses and capabilities of the
-random forest model. They highlight the computation tools it employs to
-overcome obstacles, such as missing data, outliers, noisy data, and/or
-classification problems. The importance of the Gini index is described
-as a measure of accuracy of the decision trees.
+In "Classification and Regression by randomForest," Liaw and Wiener
+\[\@liaw2002classification\] discuss the introduction of the
+randomForest package for classification and regression tasks in the R
+programming language. An overview of the Random Forest algorithm is
+provided, including how it draws bootstrap samples and estimates rates
+of error. This technique is referred to as ensemble learning called
+bagging and uses decision trees as base learners. Implementation of the
+randomForest package addresses parameters for tuning the model and
+handling missing values. It is noted that the production of multiple
+trees is crucial in obtaining variable importance and measures of
+proximity. Overall, the paper serves as a practical guide for R users
+and highlights the advantages of using random forests for both
+classification and regression problems, such as robustness to
+overfitting and high prediction accuracy.
 
-Liaw and Wiener (2002) discuss the introduction of the random forest
-algorithm by L. Breiman, in addition to offering examples of its
-application in the R interface. They discuss how the algorithm draws
-bootstrap samples and estimates rates of error. It is noted that the
-production of multiple trees is crucial in obtaining variable importance
-and measures of proximity.
+In the paper "Random Forest as a Predictive Analytics Alternative to
+Regression in Institutional Research", the authors
+\[\@lingjun2019random\] explore the application of Random Forests as a
+predictive analytics tool in institutional research. They discuss the
+limitations of traditional regression models in handling complex
+datasets and introduce Random Forest as an alternative approach. To do
+this, they highlight the key benefits of the Random Forest model, as it
+has the ability to handle non-linear relationships, interactions, and
+high-dimensional data effectively. In addition, they expound upon
+predictive capabilities, improved accuracy, and robustness as a strategy
+for data-based decision making.
 
-Lingjun et al. (2019) discuss uses and advantages of tree-based machine
-learning algorithms. They highlight the key benefits of these models
-over classical regression analyses, and they expound upon the predictive
-capabilities as a strategy for data-based decision making. A simulation
-experiment is outlined to allow for greater understanding of the process
-and its corresponding results.
+In "Machine Learning Benchmarks and Random Forest Regression", Segal
+\[\@segal2004machine\] explores the application and effectiveness of
+Random Forest Regression in the context of machine learning. Machine
+learning algorithms may face challenges, which emphasize the need for
+standardized datasets and evaluation metrics. Segal (2004) examines how
+Random Forest Regression performs across various datasets, comparing its
+performance to other regression techniques. The study highlights the
+strengths of Random Forest Regression in handling non-linear
+relationships and noisy data, showcasing its versatility and robustness.
+Additionally, the paper provides insights into the impact of different
+parameters on the performance of Random Forest Regression, offering
+practical guidance for its implementation. Overall, the paper
+contributes to the understanding of Random Forest Regression and its
+potential as a powerful tool in the field of machine learning.
 
-Segal (2004) offers a clear definition and practical application of
-random forest regression. Two different profiles are established using
-random forest methodology, and predictive errors are identified.
-Mathematical equations lend support to the regression analysis. Segal
-(2004) explains that one of guiding forces in random forest regression
-is to increase variance by decreasing correlation.
+## Methods
 
-## Background
+### Decision Trees
 
-### **Decision trees**
+Decision Trees are a type of Supervised Machine Learning where the data
+is continuously split according to a certain parameter. The tree can be
+explained by two entities: decision (internal) nodes and leaves. The
+decision nodes are where the data is split, and the leaves are the
+decisions or the final outcomes.
 
-Decision trees start with a basic question, such as, "Should I surf?"
-From there, you can ask a series of questions to determine an answer.
-"Is it a long period swell?" or "Is the wind blowing offshore?".
+A decision tree is a flowchart-like structure in which each internal
+node represents a test on a feature (e.g. whether a coin flip comes up
+heads or tails) , each leaf node represents a class label (decision
+taken after computing all features), and branches represent conjunctions
+of features that lead to those class labels. The paths from root to leaf
+represent classification rules. The algorithm for predicting the class
+of a given dataset starts from the root node of the tree. It compares
+the values of the root attribute with the record attribute, follows the
+branch based on the comparison, and jumps to the next node. This process
+continues until it reaches the leaf node of the tree.
 
-These questions make up the decision nodes in the tree, acting as a
-means to split the data. Each question aids in the arrival of a final
-decision, which would be denoted by the leaf node.
+Decision trees in random forest work together to create a robust and
+accurate model by leveraging the diversity and averaging multiple
+decision trees.
 
-Observations that fit the criteria will follow the "Yes" branch, and
-those that do not will follow the alternate path.
+![](images/image-1963384308.png)
 
-Decision trees seek to find the best split to subset the data, and they
-are typically trained through the Classification and Regression Tree
-(CART) algorithm. Metrics, such as Gini impurity, information gain, or
-mean square error (MSE), can be used to evaluate the quality of the
-split.
+When evaluating the quality of the splits in decision trees, several
+metrics are considered.
 
-This decision tree is an example of a classification problem, where the
-class labels are "" and "."
+**1. Gini impurity:**
 
--   Will rework and tailor example to dataset.
+The Gini coefficient is a measure of inequality between 0 and 1, where a
+value closer to 1 indicates more inequality. This is used to calculate
+inequality in income and wealth, but it can be used in other problems
+where a measure of inequality is needed. $$
+G = \frac{\sum_{i=1}^{n}\sum_{j=1}^{n}|x_i - x_j|}{2n^2\bar{x}}
+$$
 
-### **Applications**
+**2. Entropy:**
 
-#### **Benefits/Advantages**
+For decision trees, a related measure is used to measure the entropy of
+a result by calculating the probability that a random entry will be in
+the wrong class if it were randomly assigned a label.
+$$H=\sum\limits_{i=1}^{n}-p_i log_2 p_i$$
+
+**3. Information gain:**
+
+This measure can be used in multiclass problems and is often used for
+finding where to split the features. The other commonly used option is
+Entropy, which is also an entropy measure but with a more complex
+calculation.
+
+The tradeoff is a faster calculation using the Gini impurity, with a
+possibly higher accuracy. $$I_G=1-\sum\limits_{i=1}^{J}p_i^2$$
+
+**4. Out of bag error estimation:**
+
+-   Each decision tree is trained on a bootstrapped sample of the
+    original dataset.
+-   The data points that are not included in the bootstrapped sample for
+    a particular tree are called out-of-bag instances.
+-   OOB error provides a measure of how well the random forest model is
+    likely to perform on new data.
+-   It is useful for assessing model performance and tuning
+    hyperparameters.
+
+$$\text{OOB Error} = \frac{1}{N} \sum_{i=1}^{N} I(y_i \neq \hat{y}_{i, \text{OOB}})
+$$
+
+### Random Forest involves the following basic concepts:
+
+1.  **Bootstrap Sampling (Bagging):** Perform random sampling with
+    replacement on the original dataset to form a new dataset for
+    training a decision tree. In each round of bootstrap sampling, about
+    36.8% of the samples will be missed, not appearing in the new
+    dataset, and these data are referred to as out-of-bag (OOB) data.
+
+2.  **Random Feature Selection:** At each node of the decision tree
+    training, randomly select a subset of features, and then use
+    information gain (or other criteria) to choose the best split.
+    Repeat the above steps, generating multiple decision trees, to form
+    a "forest".
+
+3.  **Prediction:** When predicting new data samples, each tree produces
+    its own prediction result. Random Forest synthesizes these results
+    and uses majority voting to determine the final prediction outcome.
+
+4.  **Ensemble Learning via Hard Voting Classifier:** By voting, the
+    results of five models are integrated to get the combined outcome.
+    The result selects the category that appears most frequently as the
+    final prediction result. This is a strategy of ensemble learning,
+    known as the Hard Voting Classifier. For a sample point x, five
+    models make predictions respectively:
+
+> y1 = Model1(x)
+>
+> y2 = Model2(x)
+>
+> y3 = Model3(x)
+>
+> y4 = Model4(x)
+>
+> y5 = Model5(x)
+
+Put these five prediction results into a set `Y = {y1, y2, y3, y4, y5}`,
+and the final prediction result y_final is the element that appears most
+frequently in the set Y, mathematically represented as:
+
+> y_final = mode(Y)
+
+### Five normalization methods
+
+The data needs to be normalized using 5 different methods (**Min-Max
+Normalization**, **Z-Score Normalization**, **Max Absolute Scaling**,
+**L1 Norm Normalization**, **L2 Norm Normalization**) due to significant
+differences in feature values initially.
+
+> X_new = (X_old-min(X_old)) / (max(X_old)-min(X_old))
+>
+> X_new = (X_old - mean(X_old)) / sd(X_old)
+>
+> X_new = X_old / max(abs(X_old))
+>
+> X_new = X_old / sum(abs(X_old))
+>
+> X_new = X_old / sqrt(sum(X_old\^2))
+
+### Evaluation
+
+Evaluate the test set and calculate four metrics (accuracy, recall,
+precision, F1).
+
+-   Accuracy = sum(actual labels == predicted labels) / total number of
+    labels
+-   Recall = True Positives / (True Positives + False Negatives)
+-   Precision = True Positives / (True Positives + False Positives)
+-   F1 = 2 \* (Precision \* Recall) / (Precision + Recall)
+
+### Final outcome:
+
+The idea is to combine five models using a voting method and pick the
+category with the most votes as our final prediction. It's like a team
+effort in machine learning, known as the Hard Voting Classifier. For a
+sample point x, five models make predictions respectively:
+
+> y1 = Model1(x)
+>
+> y2 = Model2(x)
+>
+> y3 = Model3(x)
+>
+> y4 = Model4(x)
+>
+> y5 = Model5(x)
+
+Place these five prediction results into a set
+`Y = {y1, y2, y3, y4, y5}`. The final prediction result `y_final` is the
+element that appears most frequently in the set `Y`, mathematically
+represented as `y_final = mode(Y)`.
+
+## Benefits/Advantages
 
 -   Capable of performing both classification and regression tasks.
 -   Capable of handling large datasets with high dimensionality.
@@ -119,133 +279,165 @@ class labels are "" and "."
 -   Can be used as a feature selection tool using its variable
     importance plot.
 
-#### **Limitations/Challenges**
+## Limitations/Challenges
 
 -   Prone to problems, such as bias and overfitting.
     -   However, when multiple decision trees form an ensemble in the
         random forest algorithm, they predict results with greater
         accuracy, particularly when the individual trees are
         uncorrelated with each other.
--   Time-consuming
+-   Time-consuming.
     -   Since random forest algorithms can handle large data sets, they
-        can be provide more accurate predictions. However, the process
-        can be slow as they are computing data for each individual
-        decision tree.
--   Requires more resources
--   More complex
+        can provide more accurate predictions. However, the process can
+        be slow as they are computing data for each individual decision
+        tree.
+-   Requires more resources.
+-   More complex.
     -   The prediction of a single decision tree is easier to interpret
         when compared to a forest of them.
 
-## Methods
+## Assumptions
 
-### **Ensemble Method**
+-   Independence of trees: Each tree is built using a random subset of
+    features and a bootstrapped sample of the data, aiming to reduce
+    correlation between trees.
+-   Randomness: While some of the actual values in the feature variable
+    of the dataset should be present so the classifier can predict
+    accurate results, random forests must also assume random subset of
+    features to prevent overfitting and encourage diversity.
 
-Ensemble learning methods are made up of a set of classifiers (i.e.,
-decision trees), and their predictions are aggregated to identify the
-most popular result.
+# Analysis and Results
 
--   **Bagging**
+## Data and Visualization
 
-    -   Also known as bootstrap aggregation
-    -   A random sample of data in a training set is selected with
-        replacement, meaning the individual data points can be chosen
-        more than once.
-    -   Models are trained independently.
-    -   Final ouput is based on majority voting.
-    -   This approach helps to reduce variance.
+Data Source: **Mendeley Data**
 
--   **Boosting**
-
-    -   Combines weak learners into strong learners by creating
-        sequential models such that the final model has the highest
-        accuracy.
-
-### **Random forest algorithm**
-
-Steps to Build a Random Forest
-
--   Randomly select "K" features from total "m" features where k \< m
--   Among the "K" features, calculate the node "d" using the best split
-    point
--   Split the node into daughter nodes using the best split method
--   Repeat the previous steps until you reach the "l" number of nodes
--   Build a forest by repeating all steps for "n" number times to create
-    "n" number of trees
-
-After the random forest trees and classifiers are created, predictions
-can be made using the following steps:
-
--   Run the test data through the rules of each decision tree to predict
-    the outcome and then store that predicted target outcome
--   Calculate the votes for each of the predicted targets
--   The most highly voted predicted target is the final prediction 
-
-### **Assumptions**
-
--   Some of the actual values in the feature variable of the dataset
-    should be present so the classifier can predict accurate results.
-
--   The predictions from each tree must have very low correlations.
-
-## Analysis and Results
-
-### Data and Visualization
-
-#### Dataset
-
-Data Source: Mendeley Data
-
-\[Species data used in Random Forest modelling to determine predictors
-of extinction\](https://data.mendeley.com/datasets/tc6syk8vwf/1)
+[Species data used in Random Forest modelling to determine predictors of
+extinction](https://data.mendeley.com/datasets/tc6syk8vwf/1)
 
 **Description**
 
-Data was extracted from the South African Red List database to compile a
-profile for plant extinctions (SANBI 2021). South Africa offers a wide
+Data was extracted from the South African Red List [@SANBI2021] database
+to compile a profile for plant extinctions. South Africa offers a wide
 array of biodiversity and estimates over 22,000 plant taxa. The
-International Union for Conservation of Nature\'s (IUCN) Red List of
-Threatened Species provides a standardized method to document and assess
-extinctions (IUCN 2023). Species are classified into one of the
-following groups: Extinct (EX), Extinct in the wild (EW), Critically
+International Union for Conservation of Nature's (IUCN) [@IUCN2023] Red
+List of Threatened Species provides a standardized method to document
+and assess extinctions (IUCN 2023). Species are classified into one of
+the following groups: Extinct (EX), Extinct in the wild (EW), Critically
 endangered possibly extinct (CR PE), Critically endangered (CR),
 Endangered (EN), Vulnerable (VU), Near threatened (NT), Conservation
 dependent (CD), Least concern (LC), and Data deficient (DD).
 
-Plants are an essential component to an ecosystem\'s functionality, so
-it is critical to evaluate drivers of extinction and determine methods
-of prevention. To examine potential indicators for extinctions, extinct,
+Plants are an essential component to an ecosystem's functionality, so it
+is critical to evaluate drivers of extinction and determine methods of
+prevention. To examine potential indicators for extinctions, extinct,
 threatened, and non-threatened taxa are compared to identify and/or
 distinguish traits that may be associated with risk or vulnerability.
 The final dataset comprises 842 extant taxa, 33 Extinct taxa, and 69
-Possibly Extinct (CR PE) taxa, to total 944 species
-\[\@van2023species\].
+Possibly Extinct (CR PE) taxa, to total 944 species.
 
-**Table 1** organizes and summarizes the explanatory variables. 
+The table [@vanderColff2023] below organizes and summarizes the
+explanatory variables.
 
-The response variable is Extinction risk status grouped into Extinct,
-Threatened (CR, EN, VU) and Not-Threatened (NT, LC, Critically Rare,
-Rare).
+| Class                  | Predictor Variables | Description                                                                                                                                                                                                                                                             |
+|------------|------------|------------------------------------------------|
+| **Human pressures**    | Habitat loss        | Conversion, fragmentation, and/or elimination of habitat. e.g., logging, wood harvesting, livestock farming, urban development.                                                                                                                                         |
+|                        | Habitat degradation | Alteration of natural habitats necessary for species survival resulting in reduced functionality e.g., fire suppression, droughts.                                                                                                                                      |
+|                        | Invasive species    | Impacts of alien species on natives through different mechanisms e.g. alteration of soil chemistry, resource competition.                                                                                                                                               |
+|                        | Pollution           | Pollutants entering the natural environment e.g., air-borne pollutants, waste.                                                                                                                                                                                          |
+|                        | Over-exploitation   | Excessive use of species causing decreases in viable populations e.g. overharvesting.                                                                                                                                                                                   |
+|                        | Other               | Intrinsic factors, changes in native taxa dynamics, human disturbance, natural disasters.                                                                                                                                                                               |
+|                        | Unknown             | N/A                                                                                                                                                                                                                                                                     |
+| **Biological traits**  | Life form (LF)      | Annual or perennial                                                                                                                                                                                                                                                     |
+|                        | Growth form (GF)    | One of 14 distinct forms: Parasitic plant, Tree, Shrub, Suffrutex, Herb, Lithophyte, Succulent, Graminoid, Geophyte, Climber, Carnivorous, Cyperoid, Creeper, Epiphyte.                                                                                                 |
+| **Distribution state** | Biomes              | One of nine biomes present in South Africa: Fynbos, Grassland, Succulent Karoo, Albany Thicket, Savanna, Forest, Nama Karoo, Desert, Indian Ocean Coastal Belt. Note: if a taxon was found in multiple biomes, it was marked as generalist.                             |
+|                        | Range size          | All species range sizes are based on the standard measure of Extent of Occurrence (EOO), a parameter defined as the shortest continuous imaginary boundary that can be drawn to encompass all the known, inferred, or projected sites of present occurrence of a taxon. |
 
-**Table 1.**
 
-![](images/image-613595486.png)\
-
-```{r, warning=FALSE, echo=T, message=FALSE}
-# loading packages 
-library(tidyverse)
-library(knitr)
-library(ggthemes)
-library(ggrepel)
+```{r}
+library(caret)
+library(caTools)
+library(dplyr)
 library(dslabs)
+library(ggcorrplot)
+library(ggthemes)
+library(ggplot2)
+library(gridExtra)
+library(gsheet)
+library(gtsummary)
+library(ipred)
+library(knitr)
+library(lessR)
+library(plyr)
+library(randomForest)
+library(readr)
+library(ROSE)
+library(rpart)       
+library(rpart.plot)  
+library(rsample)     
+library(splitTools)
+library(tidyverse)
+library(vip)
+library(visreg)
+
+data2 <- as_tibble(gsheet2tbl("https://docs.google.com/spreadsheets/d/1BJui4r7xoVY6e3z2-IgCr_eBn7SvNAQ4BEpPo1GILNU/edit?usp=sharing"))
+
+data2 <- as.data.frame(data2)
+set.seed(123)
+split2 <- sample.split(data2, SplitRatio = 0.7) 
+species_train <- subset(data2, split2 == "TRUE") 
+species_test <- subset(data2, split2 == "FALSE")
+#m3 <- rpart(
+#  formula = Group~ LF + GF + Biomes + Range +
+#    Habitat_degradation + Habitat_loss + IAS +
+#    Other + Unknown + Other + Over_exploitation,
+#  data    = species_train,
+#  method  = "anova"
+#)
+
+
 ```
 
-```{r, warning=FALSE, echo=TRUE}
-# Load Data
-
-
-```
 
 ### Statistical Modeling
+
+# Statistical Modeling
+## Packages
+The R packages utilized for running the statistical modeling for the Random Forest algorithm were **readr**, **plyr**, **ipred**, **caret**, **caTools**, **randomForest**, **ROSE**. 
+- readr: Part of the tidyverse, readr is designed for reading rectangular data, particularly CSVs (comma-separated values) and other delimited types of text files. It's known for its speed and for providing more informative error messages compared to base R functions like read.csv. It also converts data into tibbles, which are a modern take on data frames.
+
+- **plyr**: This package is used for splitting, applying, and combining data. plyr is known for its capability to handle different data types (arrays, lists, data frames, etc.) and apply functions to each element of the split data, then combine the results. Note that plyr is largely superseded by dplyr (also part of tidyverse), which is more efficient especially for large datasets.
+
+- **ipred**: Standing for "Improved Predictors", ipred provides functions for predictive modeling. It includes methods for bagging (Bootstrap Aggregating), which helps improve the stability and accuracy of machine learning algorithms, particularly for decision trees.
+
+- **caret**: The caret package (short for Classification And REgression Training) is a comprehensive framework for building machine learning models in R. It simplifies the process of model training, tuning, and predicting by providing a unified interface for various machine learning algorithms.
+
+- **caTools**: This package contains several tools for handling data, including functions for reading/writing Binary Large Objects (BLOBs), moving window statistics, and splitting data into training/testing sets. It's often used for its simple and effective method for creating reproducible train/test splits.
+
+- **randomForest**: As the name suggests, this package is used for implementing the Random Forest algorithm for classification and regression tasks. Random Forest is an ensemble learning method that operates by constructing a multitude of decision trees and outputting the mode of the classes (classification) or mean prediction (regression) of the individual trees.
+
+- **ROSE**: Standing for Random OverSampling Examples, the ROSE package is used to deal with imbalanced datasets in binary classification problems. It generates synthetic samples in a two-class problem to balance the class distribution, using smoothed bootstrapping. This helps improve the performance of classification models on imbalanced datasets.
+
+
+## Data Preparation
+Encode the 15 columns, with 'group' categorized into 1, 2, and 3. 'Yes' should be encoded as 1, 'No' as 0, and other categories should be numbered starting from 1. In the first column, replace the "-" with a ".".
+
+### Original Dataset Preview
+
+```{r}
+kable(head(data2, 10))
+```
+### Encoding Dataset Prview
+
+```{r, warning=FALSE, echo=TRUE}
+```
+Split the dataset into a training set and a test set with a ratio of 7:3. Perform class imbalance handling on the training set using the ROSE library, aiming for an equal data quantity among classes, represented as 1:1:1.
+
+Given a minority class sample point x, we find its k nearest neighbors. Then, we randomly select one of these neighbors, denoted as z, and construct a new data point y that lies on the line segment between x and z:
+
+> y = x + λ * (z - x)
+
+Here, λ is a random number between 0 and 1.
 
 #### Tuning
 
@@ -275,8 +467,28 @@ hyperparameters should be present:
 
 ```
 
-### Conclusion
+## Conclusion
 
-Conclusion here...
+Random Forest is a powerful and flexible machine learning algorithm that
+can be used for a wide range of tasks. It is particularly useful when
+dealing with complex data composed of a large number of features and
+when the goal is to achieve high predictive accuracy while avoiding
+overfitting. The algorithm incorporates versatility in its capabilities
+for classification and regression tasks, handling missing data, and
+displaying robustness when faced with outliers and noisy data.
+
+We produced a predictive model with 88% accuracy, indicating that our
+explanatory variables were able to differentiate between non threatened,
+threatened, and extinct taxa. Extinct species were classified with 100%
+specificity and 70% sensitivity. Most extinctions were perennial shrubs
+found in the Cape Floristic Region, a global biodiversity hotspot. As
+range was the strongest predictor of extinction, many of the recorded
+taxa deemed susceptible were range-restricted. Habitat loss is presented
+as the second strongest variable of importance in predicting plant
+extinctions. Predictions were based on a quantitative, evidence-based
+approach, though gaps in knowledge highlighted areas for further study.
+Improved species monitoring and documentation of threat factors will aid
+in a deeper understanding of the ecological role and value of South
+African plant species.
 
 ## References
