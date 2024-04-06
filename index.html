@@ -85,6 +85,25 @@ code span.st { color: #4070a0; }
 code span.va { color: #19177c; } 
 code span.vs { color: #4070a0; } 
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
 </style>
 
 
@@ -2791,9 +2810,9 @@ G = \frac{\sum_{i=1}^{n}\sum_{j=1}^{n}|x_i - x_j|}{2n^2\bar{x}}
 <p>Data Source: <strong>Mendeley Data</strong></p>
 <p><a href="https://data.mendeley.com/datasets/tc6syk8vwf/1">Species data used in Random Forest modelling to determine predictors of extinction</a></p>
 <p><strong>Description</strong></p>
-<p>Data was extracted from the South African Red List <span class="citation" data-cites="SANBI2021">(<a href="#ref-SANBI2021" role="doc-biblioref"><strong>SANBI2021?</strong></a>)</span> database to compile a profile for plant extinctions. South Africa offers a wide array of biodiversity and estimates over 22,000 plant taxa. The International Union for Conservation of Nature’s (IUCN) <span class="citation" data-cites="IUCN2023">(<a href="#ref-IUCN2023" role="doc-biblioref"><strong>IUCN2023?</strong></a>)</span> Red List of Threatened Species provides a standardized method to document and assess extinctions (IUCN 2023). Species are classified into one of the following groups: Extinct (EX), Extinct in the wild (EW), Critically endangered possibly extinct (CR PE), Critically endangered (CR), Endangered (EN), Vulnerable (VU), Near threatened (NT), Conservation dependent (CD), Least concern (LC), and Data deficient (DD).</p>
+<p>Data was extracted from the South African Red List <span class="citation" data-cites="SANBI2021">(<a href="#ref-SANBI2021" role="doc-biblioref">South African National Biodiversity Institute 2021</a>)</span> database to compile a profile for plant extinctions. South Africa offers a wide array of biodiversity and estimates over 22,000 plant taxa. The International Union for Conservation of Nature’s (IUCN) <span class="citation" data-cites="IUCN2023">(<a href="#ref-IUCN2023" role="doc-biblioref">International Union for Conservation of Nature 2023</a>)</span> Red List of Threatened Species provides a standardized method to document and assess extinctions (IUCN 2023). Species are classified into one of the following groups: Extinct (EX), Extinct in the wild (EW), Critically endangered possibly extinct (CR PE), Critically endangered (CR), Endangered (EN), Vulnerable (VU), Near threatened (NT), Conservation dependent (CD), Least concern (LC), and Data deficient (DD).</p>
 <p>Plants are an essential component to an ecosystem’s functionality, so it is critical to evaluate drivers of extinction and determine methods of prevention. To examine potential indicators for extinctions, extinct, threatened, and non-threatened taxa are compared to identify and/or distinguish traits that may be associated with risk or vulnerability. The final dataset comprises 842 extant taxa, 33 Extinct taxa, and 69 Possibly Extinct (CR PE) taxa, to total 944 species.</p>
-<p>The table <span class="citation" data-cites="vanderColff2023">(<a href="#ref-vanderColff2023" role="doc-biblioref"><strong>vanderColff2023?</strong></a>)</span> below organizes and summarizes the explanatory variables.</p>
+<p>The table <span class="citation" data-cites="vanderColff2023">(<a href="#ref-vanderColff2023" role="doc-biblioref">Colff et al. 2023</a>)</span> below organizes and summarizes the explanatory variables.</p>
 <table class="table">
 <colgroup>
 <col style="width: 16%">
@@ -3174,12 +3193,23 @@ G = \frac{\sum_{i=1}^{n}\sum_{j=1}^{n}|x_i - x_j|}{2n^2\bar{x}}
 <p>Random Forest is a powerful and flexible machine learning algorithm that can be used for a wide range of tasks. It is particularly useful when dealing with complex data composed of a large number of features and when the goal is to achieve high predictive accuracy while avoiding overfitting. The algorithm incorporates versatility in its capabilities for classification and regression tasks, handling missing data, and displaying robustness when faced with outliers and noisy data.</p>
 <p>We produced a predictive model with 88% accuracy, indicating that our explanatory variables were able to differentiate between non threatened, threatened, and extinct taxa. Extinct species were classified with 100% specificity and 70% sensitivity. Most extinctions were perennial shrubs found in the Cape Floristic Region, a global biodiversity hotspot. As range was the strongest predictor of extinction, many of the recorded taxa deemed susceptible were range-restricted. Habitat loss is presented as the second strongest variable of importance in predicting plant extinctions. Predictions were based on a quantitative, evidence-based approach, though gaps in knowledge highlighted areas for further study. Improved species monitoring and documentation of threat factors will aid in a deeper understanding of the ecological role and value of South African plant species.</p>
 </section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
+<section id="references" class="level2 unnumbered">
+
+
 </section>
 </section>
 
-</main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-vanderColff2023" class="csl-entry" role="doc-biblioentry">
+Colff, Dewidine van der, Sabrina Kumschick, Wendy Foden, Domitilla Raimondo, Christophe BOTELLA, Lize von Staden, and John Wilson. 2023. <span>“Species Data Used in Random Forest Modelling to Determine Predictors of Extinction.”</span> Mendeley Data. <a href="https://doi.org/10.17632/tc6syk8vwf.1">https://doi.org/10.17632/tc6syk8vwf.1</a>.
+</div>
+<div id="ref-IUCN2023" class="csl-entry" role="doc-biblioentry">
+International Union for Conservation of Nature. 2023. <span>“The IUCN Red List of Threatened Species. Version 2023-1.”</span> <a href="https://www.iucnredlist.org">https://www.iucnredlist.org</a>.
+</div>
+<div id="ref-SANBI2021" class="csl-entry" role="doc-biblioentry">
+South African National Biodiversity Institute. 2021. <span>“Red List of South African Plants Version 2021.1.”</span> <a href="http://redlist.sanbi.org/stats.php">http://redlist.sanbi.org/stats.php</a>.
+</div>
+</div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
