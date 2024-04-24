@@ -1,6 +1,6 @@
 ---
 title: "Predicting Plant Exctinctions in South Africa: A Random Forest Approach"
-author: "Kristen Monaco"
+author: "Kristen Monaco, Raymond Fleming, Teng Ma"
 date: '`r Sys.Date()`'
 format:
   html:
@@ -16,7 +16,6 @@ editor:
   markdown: 
     wrap: 72
 ---
-
 
 ## Introduction
 
@@ -35,15 +34,13 @@ of variable importance. Random Forest has gained popularity due to its
 ability to handle complex datasets and produce reliable predictions in
 various domains.
 
-### The Problem
-
-TODO
+[Quarto Slides](slides.html)
 
 ## Literature Review
 
 In the paper "Analysis of a Random Forests Model", Biau
-\[\@biau2012analysis\] provides an in-depth analysis of the Random
-Forests model. The author delves into the statistical components and
+[@biau2012analysis] provides an in-depth analysis of the Random Forests
+model. The author delves into the statistical components and
 mathematical support, as well as investigates various aspects of the
 Random Forests, such as its consistency, convergence rates, and the
 effect of the number of trees on performance. He touches on the
@@ -52,48 +49,48 @@ within the random forest algorithm. Biau provides theoretical insights
 into the behavior of Random Forests, shedding light on its robustness
 and effectiveness as a machine learning algorithm.
 
-In "A Random Forest Guided Tour", Biau and Scornet \[\@biau2016random\]
-present an extensive exploration of Random Forests, a popular machine
-learning algorithm. The paper serves as a comprehensive guide, covering
-aspects of theoretical foundations, methodology, model evaluation, and
-empirical performance. They discuss the inner workings of Random
-Forests, including topics such as tree construction, feature selection,
-and ensemble learning, which aid in predictive analysis. Overall, the
-paper serves as a valuable resource for those interested in
+In "A Random Forest Guided Tour", Biau and Scornet
+[@biau2016random]present an extensive exploration of Random Forests, a
+popular machine learning algorithm. The paper serves as a comprehensive
+guide, covering aspects of theoretical foundations, methodology, model
+evaluation, and empirical performance. They discuss the inner workings
+of Random Forests, including topics such as tree construction, feature
+selection, and ensemble learning, which aid in predictive analysis.
+Overall, the paper serves as a valuable resource for those interested in
 understanding and utilizing Random Forests in their machine learning
 tasks.
 
 In "Classification and Regression by randomForest," Liaw and Wiener
-\[\@liaw2002classification\] discuss the introduction of the
-randomForest package for classification and regression tasks in the R
-programming language. An overview of the Random Forest algorithm is
-provided, including how it draws bootstrap samples and estimates rates
-of error. This technique is referred to as ensemble learning called
-bagging and uses decision trees as base learners. Implementation of the
-randomForest package addresses parameters for tuning the model and
-handling missing values. It is noted that the production of multiple
-trees is crucial in obtaining variable importance and measures of
-proximity. Overall, the paper serves as a practical guide for R users
-and highlights the advantages of using random forests for both
-classification and regression problems, such as robustness to
-overfitting and high prediction accuracy.
+[@liaw2002classification] discuss the introduction of the randomForest
+package for classification and regression tasks in the R programming
+language. An overview of the Random Forest algorithm is provided,
+including how it draws bootstrap samples and estimates rates of error.
+This technique is referred to as ensemble learning called bagging and
+uses decision trees as base learners. Implementation of the randomForest
+package addresses parameters for tuning the model and handling missing
+values. It is noted that the production of multiple trees is crucial in
+obtaining variable importance and measures of proximity. Overall, the
+paper serves as a practical guide for R users and highlights the
+advantages of using random forests for both classification and
+regression problems, such as robustness to overfitting and high
+prediction accuracy.
 
 In the paper "Random Forest as a Predictive Analytics Alternative to
-Regression in Institutional Research", the authors
-\[\@lingjun2019random\] explore the application of Random Forests as a
-predictive analytics tool in institutional research. They discuss the
-limitations of traditional regression models in handling complex
-datasets and introduce Random Forest as an alternative approach. To do
-this, they highlight the key benefits of the Random Forest model, as it
-has the ability to handle non-linear relationships, interactions, and
-high-dimensional data effectively. In addition, they expound upon
-predictive capabilities, improved accuracy, and robustness as a strategy
-for data-based decision making.
+Regression in Institutional Research", the authors [@lingjun2019random]
+explore the application of Random Forests as a predictive analytics tool
+in institutional research. They discuss the limitations of traditional
+regression models in handling complex datasets and introduce Random
+Forest as an alternative approach. To do this, they highlight the key
+benefits of the Random Forest model, as it has the ability to handle
+non-linear relationships, interactions, and high-dimensional data
+effectively. In addition, they expound upon predictive capabilities,
+improved accuracy, and robustness as a strategy for data-based decision
+making.
 
 In "Machine Learning Benchmarks and Random Forest Regression", Segal
-\[\@segal2004machine\] explores the application and effectiveness of
-Random Forest Regression in the context of machine learning. Machine
-learning algorithms may face challenges, which emphasize the need for
+[@segal2004machine] explores the application and effectiveness of Random
+Forest Regression in the context of machine learning. Machine learning
+algorithms may face challenges, which emphasize the need for
 standardized datasets and evaluation metrics. Segal (2004) examines how
 Random Forest Regression performs across various datasets, comparing its
 performance to other regression techniques. The study highlights the
@@ -110,21 +107,15 @@ potential as a powerful tool in the field of machine learning.
 ### Decision Trees
 
 Decision Trees are a type of Supervised Machine Learning where the data
-is continuously split according to a certain parameter. The tree can be
-explained by two entities: decision (internal) nodes and leaves. The
-decision nodes are where the data is split, and the leaves are the
-decisions or the final outcomes.
-
-A decision tree is a flowchart-like structure in which each internal
-node represents a test on a feature (e.g. whether a coin flip comes up
-heads or tails) , each leaf node represents a class label (decision
-taken after computing all features), and branches represent conjunctions
-of features that lead to those class labels. The paths from root to leaf
-represent classification rules. The algorithm for predicting the class
-of a given dataset starts from the root node of the tree. It compares
-the values of the root attribute with the record attribute, follows the
-branch based on the comparison, and jumps to the next node. This process
-continues until it reaches the leaf node of the tree.
+is continuously split according to a certain parameter. Decision trees
+serve as the fundamental building blocks of the Random Forest algorithm.
+They are a powerful and intuitive tool used for both classification and
+regression tasks. Decision trees represent a flowchart-like structure,
+where each internal node represents a decision based on a feature, and
+each leaf node represents a final decision or prediction. They ask a
+series of questions, such as those with a yes or no response or will a
+coin flip come up heads or tails. They do this to split the data and
+minimize the variance for the target variable.
 
 Decision trees in random forest work together to create a robust and
 accurate model by leveraging the diversity and averaging multiple
@@ -144,14 +135,7 @@ where a measure of inequality is needed. $$
 G = \frac{\sum_{i=1}^{n}\sum_{j=1}^{n}|x_i - x_j|}{2n^2\bar{x}}
 $$
 
-**2. Entropy:**
-
-For decision trees, a related measure is used to measure the entropy of
-a result by calculating the probability that a random entry will be in
-the wrong class if it were randomly assigned a label.
-$$H=\sum\limits_{i=1}^{n}-p_i log_2 p_i$$
-
-**3. Information gain:**
+**2. Information gain:**
 
 This measure can be used in multiclass problems and is often used for
 finding where to split the features. The other commonly used option is
@@ -159,7 +143,17 @@ Entropy, which is also an entropy measure but with a more complex
 calculation.
 
 The tradeoff is a faster calculation using the Gini impurity, with a
-possibly higher accuracy. $$I_G=1-\sum\limits_{i=1}^{J}p_i^2$$
+possibly higher accuracy. $$H=\sum\limits_{i=1}^{n}-p_i log_2 p_i$$
+where $p_i$ is the percentage of each class present in the node
+resulting from a tree split.
+
+**3. Entropy:**
+
+For decision trees, a related measure is used to measure the entropy of
+a result by calculating the probability that a random entry will be in
+the wrong class if it were randomly assigned a label.
+$$I_G=1-\sum\limits_{i=1}^{J}p_i^2$$ where $p_i$ is the probability that
+a randomly labeled element would be incorrectly classified.
 
 **4. Out of bag error estimation:**
 
@@ -173,7 +167,8 @@ possibly higher accuracy. $$I_G=1-\sum\limits_{i=1}^{J}p_i^2$$
     hyperparameters.
 
 $$\text{OOB Error} = \frac{1}{N} \sum_{i=1}^{N} I(y_i \neq \hat{y}_{i, \text{OOB}})
-$$
+$$ where $N$ is the number of rows in the dataset and $I$ is an
+indicator function which returns 1 if $y_i \ne \hat{y}_{i,OOB}$
 
 ### Random Forest involves the following basic concepts:
 
@@ -190,59 +185,102 @@ $$
     a "forest".
 
 3.  **Prediction:** When predicting new data samples, each tree produces
-    its own prediction result. Random Forest synthesizes these results
-    and uses majority voting to determine the final prediction outcome.
+    its own prediction result. Random Forest combines these results and
+    uses majority voting to determine the final prediction outcome.
 
 4.  **Ensemble Learning via Hard Voting Classifier:** By voting, the
     results of five models are integrated to get the combined outcome.
     The result selects the category that appears most frequently as the
     final prediction result. This is a strategy of ensemble learning,
-    known as the Hard Voting Classifier. For a sample point x, five
-    models make predictions respectively:
-
-> y1 = Model1(x)
->
-> y2 = Model2(x)
->
-> y3 = Model3(x)
->
-> y4 = Model4(x)
->
-> y5 = Model5(x)
-
-Put these five prediction results into a set `Y = {y1, y2, y3, y4, y5}`,
-and the final prediction result y_final is the element that appears most
-frequently in the set Y, mathematically represented as:
-
-> y_final = mode(Y)
+    known as the Hard Voting Classifier.
 
 ### Five normalization methods
 
-The data needs to be normalized using 5 different methods (**Min-Max
-Normalization**, **Z-Score Normalization**, **Max Absolute Scaling**,
-**L1 Norm Normalization**, **L2 Norm Normalization**) due to significant
-differences in feature values initially.
+The data needs to be normalized using 5 different methods, due to
+significant differences in feature values initially:
 
-> X_new = (X_old-min(X_old)) / (max(X_old)-min(X_old))
->
-> X_new = (X_old - mean(X_old)) / sd(X_old)
->
-> X_new = X_old / max(abs(X_old))
->
-> X_new = X_old / sum(abs(X_old))
->
-> X_new = X_old / sqrt(sum(X_old\^2))
+-   **Min-Max Normalization**
+
+    $X_{new}=\frac{X_{old}-\min(X_{old})}{\max(X_{old})-\min(x_{old})}$
+
+-   **Z-Score Normalization**
+
+    $X_{new}=\frac{X_{old}-\bar{X}_{old}}{\sigma_{X_{old}}}$
+
+-   **Max Absolute Scaling**
+
+    $X_{new}=\frac{X_{old}}{\max(|X_{old}|)}$
+
+-   **L1 Norm Normalization**
+
+    $X_{new}=\frac{X_{old}}{\sum(|X_{old}|)}$
+
+-   **L2 Norm Normalization**
+
+    $X_{new}=\frac{X_{old}}{\sqrt{\sum{X_{old}^2}}}$
 
 ### Evaluation
 
 Evaluate the test set and calculate four metrics (accuracy, recall,
 precision, F1).
 
--   Accuracy = sum(actual labels == predicted labels) / total number of
-    labels
--   Recall = True Positives / (True Positives + False Negatives)
--   Precision = True Positives / (True Positives + False Positives)
--   F1 = 2 \* (Precision \* Recall) / (Precision + Recall)
+::: columns
+::: {.column width="12%"}
+$\text{Accuracy}$\
+\
+:::
+
+::: {.column width="35%"}
+$=\frac{\sum{\left(\text{Actual Label} = \text{Predicted Label}\right)}}{\text{Label Count}}$\
+\
+:::
+
+::: {.column width="53%"}
+:::
+:::
+
+::: columns
+::: {.column width="12%"}
+$\text{Recall}$\
+\
+:::
+
+::: {.column width="35%"}
+$=\frac{\text{True Positives}}{\text{True Positives} + \text{False Negatives}}$\
+\
+:::
+
+::: {.column width="53%"}
+:::
+:::
+
+::: columns
+::: {.column width="12%"}
+$\text{Precision}$\
+\
+:::
+
+::: {.column width="35%"}
+$=\frac{\text{True Positives}}{\text{True Positives}+\text{False Positives}}$\
+\
+:::
+
+::: {.column width="53%"}
+:::
+:::
+
+::: columns
+::: {.column width="12%"}
+$\text{F1}$
+:::
+
+::: {.column width="35%"}
+$=\frac{2*(\text{Precision}*\text{Recall})}{\text{Precision}+\text{Recall}}$\
+:::
+
+::: {.column width="53%"}
+:::
+:::
 
 ### Final outcome:
 
@@ -251,51 +289,20 @@ category with the most votes as our final prediction. It's like a team
 effort in machine learning, known as the Hard Voting Classifier. For a
 sample point x, five models make predictions respectively:
 
-> y1 = Model1(x)
->
-> y2 = Model2(x)
->
-> y3 = Model3(x)
->
-> y4 = Model4(x)
->
-> y5 = Model5(x)
-
+$y_1 = \text{MinMax}(x)$\
+\
+$y2 = \text{ZScore}(x)$\
+\
+$y3 = \text{MaxAbsoluteValue}(x)$\
+\
+$y4 = \text{L1Norm}(x)$\
+\
+$y5 = \text{L2Norm}(x)$\
+\
 Place these five prediction results into a set
-`Y = {y1, y2, y3, y4, y5}`. The final prediction result `y_final` is the
-element that appears most frequently in the set `Y`, mathematically
-represented as `y_final = mode(Y)`.
-
-## Benefits/Advantages
-
--   Capable of performing both classification and regression tasks.
--   Capable of handling large datasets with high dimensionality.
--   Decreased training time compared to other algorithms.
--   Promotes predictive ability with high accuracy, even with large
-    datasets.
--   Can solve problems internally and still maintain accuracy, even when
-    a large proportion of data is missing.
--   Enhances the accuracy of the model and prevents issues in
-    overfitting.
--   Can be used as a feature selection tool using its variable
-    importance plot.
-
-## Limitations/Challenges
-
--   Prone to problems, such as bias and overfitting.
-    -   However, when multiple decision trees form an ensemble in the
-        random forest algorithm, they predict results with greater
-        accuracy, particularly when the individual trees are
-        uncorrelated with each other.
--   Time-consuming.
-    -   Since random forest algorithms can handle large data sets, they
-        can provide more accurate predictions. However, the process can
-        be slow as they are computing data for each individual decision
-        tree.
--   Requires more resources.
--   More complex.
-    -   The prediction of a single decision tree is easier to interpret
-        when compared to a forest of them.
+$Y = \{y_1,y_2,y_3,y_4,y_5\}$. The final prediction result $y_{final}$
+is the element that appears most frequently in the set $Y$,
+mathematically represented as $y_{final} = \text{mode}(Y)$.
 
 ## Assumptions
 
@@ -304,8 +311,9 @@ represented as `y_final = mode(Y)`.
     correlation between trees.
 -   Randomness: While some of the actual values in the feature variable
     of the dataset should be present so the classifier can predict
-    accurate results, random forests must also assume random subset of
-    features to prevent overfitting and encourage diversity.
+    accurate results, random forests must also assume a random subset of
+    features to reduce the probability of overfitting and encourage tree
+    diversity.
 
 # Analysis and Results
 
@@ -316,49 +324,55 @@ Data Source: **Mendeley Data**
 [Species data used in Random Forest modelling to determine predictors of
 extinction](https://data.mendeley.com/datasets/tc6syk8vwf/1)
 
-**Description**
-
-Data was extracted from the South African Red List [@SANBI2021] database
-to compile a profile for plant extinctions. South Africa offers a wide
-array of biodiversity and estimates over 22,000 plant taxa. The
-International Union for Conservation of Nature's (IUCN) [@IUCN2023] Red
-List of Threatened Species provides a standardized method to document
-and assess extinctions (IUCN 2023). Species are classified into one of
-the following groups: Extinct (EX), Extinct in the wild (EW), Critically
-endangered possibly extinct (CR PE), Critically endangered (CR),
-Endangered (EN), Vulnerable (VU), Near threatened (NT), Conservation
-dependent (CD), Least concern (LC), and Data deficient (DD).
+**Description** Data was extracted from the South African Red List
+database [@SANBI2021] to compile a profile for plant extinctions. South
+Africa offers a wide array of biodiversity and estimates over 22,000
+plant taxa. The International Union for Conservation of Nature's (IUCN)
+[@IUCN2023] Red List of Threatened Species provides a standardized
+method to document and assess extinctions (IUCN 2023). Species are
+classified into one of the following statuses: Extinct (EX), Extinct in
+the wild (EW), Critically endangered possibly extinct (CR PE),
+Critically endangered (CR), Endangered (EN), Vulnerable (VU), Near
+threatened (NT), Conservation dependent (CD), Least concern (LC), and
+Data deficient (DD).
 
 Plants are an essential component to an ecosystem's functionality, so it
 is critical to evaluate drivers of extinction and determine methods of
-prevention. To examine potential indicators for extinctions, extinct,
-threatened, and non-threatened taxa are compared to identify and/or
-distinguish traits that may be associated with risk or vulnerability.
-The final dataset comprises 842 extant taxa, 33 Extinct taxa, and 69
-Possibly Extinct (CR PE) taxa, to total 944 species.
+prevention. To examine potential indicators, extinct, threatened, and
+non-threatened taxa are compared to identify and/or distinguish traits
+that may be associated with risk or vulnerability. The final dataset
+comprises 842 extant taxa, 33 Extinct taxa, and 69 Possibly Extinct (CR
+PE) taxa, to total 944 species.
 
-The table [@vanderColff2023] below organizes and summarizes the
-explanatory variables.
+The table below organizes and summarizes the explanatory variables.
 
-| Class                  | Predictor Variables | Description                                                                                                                                                                                                                                                             |
-|---------------|---------------|-------------------------------------------|
-| **Human pressures**    | Habitat loss        | Conversion, fragmentation, and/or elimination of habitat. e.g., logging, wood harvesting, livestock farming, urban development.                                                                                                                                         |
-|                        | Habitat degradation | Alteration of natural habitats necessary for species survival resulting in reduced functionality e.g., fire suppression, droughts.                                                                                                                                      |
-|                        | Invasive species    | Impacts of alien species on natives through different mechanisms e.g. alteration of soil chemistry, resource competition.                                                                                                                                               |
-|                        | Pollution           | Pollutants entering the natural environment e.g., air-borne pollutants, waste.                                                                                                                                                                                          |
-|                        | Over-exploitation   | Excessive use of species causing decreases in viable populations e.g. overharvesting.                                                                                                                                                                                   |
-|                        | Other               | Intrinsic factors, changes in native taxa dynamics, human disturbance, natural disasters.                                                                                                                                                                               |
-|                        | Unknown             | N/A                                                                                                                                                                                                                                                                     |
-| **Biological traits**  | Life form (LF)      | Annual or perennial                                                                                                                                                                                                                                                     |
-|                        | Growth form (GF)    | One of 14 distinct forms: Parasitic plant, Tree, Shrub, Suffrutex, Herb, Lithophyte, Succulent, Graminoid, Geophyte, Climber, Carnivorous, Cyperoid, Creeper, Epiphyte.                                                                                                 |
-| **Distribution state** | Biomes              | One of nine biomes present in South Africa: Fynbos, Grassland, Succulent Karoo, Albany Thicket, Savanna, Forest, Nama Karoo, Desert, Indian Ocean Coastal Belt. Note: if a taxon was found in multiple biomes, it was marked as generalist.                             |
-|                        | Range size          | All species range sizes are based on the standard measure of Extent of Occurrence (EOO), a parameter defined as the shortest continuous imaginary boundary that can be drawn to encompass all the known, inferred, or projected sites of present occurrence of a taxon. |
+| **Type of Variable** | **Variable Name**   | **Description**                                                                                                                                                                                                                                                         | **Range of Values** |
+|-----------------|-----------------|---------------------|-----------------|
+| **Binary**           | Habitat loss        | Conversion, fragmentation, and/or elimination of habitat. e.g., logging, wood harvesting, livestock farming, urban development.                                                                                                                                         | (0, 1)              |
+|                      | Habitat degradation | Alteration of natural habitats necessary for species survival resulting in reduced functionality e.g., fire suppression, droughts.                                                                                                                                      | (0, 1)              |
+|                      | Invasive species    | Impacts of alien species on natives through different mechanisms e.g. alteration of soil chemistry, resource competition.                                                                                                                                               | (0, 1)              |
+|                      | Pollution           | Pollutants entering the natural environment e.g., air-borne pollutants, waste.                                                                                                                                                                                          | (0, 1)              |
+|                      | Over-exploitation   | Excessive use of species causing decreases in viable populations e.g. overharvesting.                                                                                                                                                                                   | (0, 1)              |
+|                      | Other               | Intrinsic factors, changes in native taxa dynamics, human disturbance, natural disasters.                                                                                                                                                                               | (0, 1)              |
+|                      | Unknown             | N/A                                                                                                                                                                                                                                                                     | (0, 1)              |
+| **Categorical**      | Life form (LF)      | Annual or perennial                                                                                                                                                                                                                                                     | (0, 1)              |
+|                      | Growth form (GF)    | One of 14 distinct forms: Parasitic plant, Tree, Shrub, Suffrutex, Herb, Lithophyte, Succulent, Graminoid, Geophyte, Climber, Carnivorous, Cyperoid, Creeper, Epiphyte.                                                                                                 | (1,14)              |
+|                      | Biomes              | One of nine biomes present in South Africa: Fynbos, Grassland, Succulent Karoo, Albany Thicket, Savanna, Forest, Nama Karoo, Desert, Indian Ocean Coastal Belt. \*Note: if a taxon was found in multiple biomes it was marked as generalist.                            | (1,10)              |
+| **Continuous**       | Range size          | All species range sizes are based on the standard measure of Extent of Occurrence (EOO), a parameter defined as the shortest continuous imaginary boundary that can be drawn to encompass all the known, inferred, or projected sites of present occurrence of a taxon. | (1,1855022)         |
+| **Descriptive**      | Family              | Taxonomic categorization                                                                                                                                                                                                                                                | (1, 104)            |
+|                      | Status              | Current Red List Category Designation                                                                                                                                                                                                                                   | (1, 11)             |
+| **Target**           | Group               | Threatened, Not Threatened, or Extinct                                                                                                                                                                                                                                  | (1,3)               |
+
+#### The preview of the dataset
 
 ```{r}
 library(caret)
 library(caTools)
+library(corrplot)
+library(DescTools)
 library(dplyr)
 library(dslabs)
+library(fastDummies)
 library(ggcorrplot)
 library(ggthemes)
 library(ggplot2)
@@ -368,6 +382,7 @@ library(gtsummary)
 library(ipred)
 library(knitr)
 library(lessR)
+library(magrittr)
 library(plyr)
 library(randomForest)
 library(readr)
@@ -380,25 +395,122 @@ library(tidyverse)
 library(vip)
 library(visreg)
 
-data2 <- as_tibble(gsheet2tbl("https://docs.google.com/spreadsheets/d/1BJui4r7xoVY6e3z2-IgCr_eBn7SvNAQ4BEpPo1GILNU/edit?usp=sharing"))
 
-data2 <- as.data.frame(data2)
-set.seed(123)
-split2 <- sample.split(data2, SplitRatio = 0.7) 
-species_train <- subset(data2, split2 == "TRUE") 
-species_test <- subset(data2, split2 == "FALSE")
-#m3 <- rpart(
-#  formula = Group~ LF + GF + Biomes + Range +
-#    Habitat_degradation + Habitat_loss + IAS +
-#    Other + Unknown + Other + Over_exploitation,
-#  data    = species_train,
-#  method  = "anova"
-#)
+data <- as_tibble(gsheet2tbl("https://docs.google.com/spreadsheets/d/1BJui4r7xoVY6e3z2-IgCr_eBn7SvNAQ4BEpPo1GILNU/edit?usp=sharing"))
 
+ggplot(data, aes(x = factor(Status), fill = factor(Status))) + 
+  geom_bar(show.legend = FALSE) +
+  scale_fill_brewer(palette = "Paired") +
+  labs(title = "Distribution of Species by Conservation Status", 
+       x = "Status", 
+       y = "Frequency") +
+  theme_minimal() +
+  theme(text = element_text(size = 12),
+        plot.title = element_text(hjust = 0.5),
+        axis.title = element_text(size = 14, face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        panel.grid.major = element_line(color = "grey80"),
+        panel.grid.minor = element_blank())
 
 ```
 
-### Statistical Modeling
+The bar plot provides an overview of frequency for each species by
+conservation status. This enables a concise visualization of categorical
+data, with each bar directly corresponding to the magnitude of its
+respective category.
+
+The plot clearly displays imbalance in the dataset, with the 'LC'
+category drastically outnumbering the others with a frequency that
+surpasses 500. To effectively tackle this issue and reduce potential
+bias, it might be necessary to use techniques for resampling the data
+that can boost the representation of underrepresented classes or balance
+out the dominance of the overrepresented class. By implementing these
+strategies, any insights or models derived from this analysis reflect a
+more balanced dataset, avoiding any bias caused by imbalanced data. In
+order to achieve this goal, the ROSE package has been chosen. This is a
+tool specifically designed for addressing imbalances in datasets. With
+its advanced methods for generating synthetic data and resampling, ROSE
+enables us to achieve a fairer distribution of classes and thereby
+enhance the reliability and validity of our analytical outcomes.
+
+#### Feature Associations Plot
+
+```{r}
+
+train<-data
+corrDF <- train %>% mutate(Range=ntile(Range, n=20))
+corrDF <- corrDF %>% select(!Group) %>% mutate(across(c("Group","LF","GF","Range",
+                                     "Biomes","Range","Habitat_degradation",
+                                     "Habitat_loss","IAS","Other",
+                                     "Over_exploitation","Pollution","Unknown"),
+                                     as_factor))
+
+ggcorrplot::ggcorrplot(DescTools::PairApply(corrDF,DescTools::CramerV), type='lower')
+```
+
+The image is a ggcorrplot, which is a way of visualizing how different
+ecological factors like "Pollution" and "Habitat_loss" are associated to
+each other. The colors in the plot show how strong these relationships
+are, with red indicating positive correlation. The diagonal shows that
+when variables are compared to themselves, there is a perfect positive
+association. The squares in this heatmap show how the variables on the x
+and y axes are related. A correlation of 1 means they have a perfect
+positive relationship, -1 means they have a perfect negative
+relationship, and 0 means there's no relationship at all. The colors
+represent the strength and direction of the correlations: red shades
+mean there's a positive correlation, blue shades mean there's a negative
+correlation, and the intensity of the color shows how strong the
+correlation is. The variables used are related to ecology and biology,
+like "Pollution", "Over_exploitation", "Habitat_loss", and "Biomes".
+
+#### Distribution of Range by Conservation Status
+
+```{r}
+ggplot(data = data, aes(x = Status, y = Range, fill = Status)) +
+  geom_boxplot() +
+  theme_bw() +
+  ylim(0,100000)
+```
+
+This boxplot shows the sizes of species' habitats based on their
+conservation status. It tells us how large or small the habitats are for
+each category. On the vertical axis is the habitat size in square
+kilometers, while the horizontal axis represents the conservation
+status. We can intuit that as the magnititude of a species' conservation
+status increases, their associated range becomes more restricted.
+
+#### Distribution of Binary Variables with a Yes/No Response
+
+```{r}
+data2 <- as_tibble(gsheet2tbl("https://docs.google.com/spreadsheets/d/1BJui4r7xoVY6e3z2-IgCr_eBn7SvNAQ4BEpPo1GILNU/edit?usp=sharing"))
+
+Value <- c(data2$Habitat_degradation, data2$Habitat_loss, data2$IAS,
+              data2$Other, data2$Over_exploitation, data2$Pollution,
+              data2$Unknown)
+ExpVariable <- rep(c("Degradation", "Loss", "IAS",
+                  "Other", "Exploitation", "Pollution",
+                  "Unknown"), each= 944)
+DataGroup <- data2$Group
+
+DV <- data.frame(DataGroup, ExpVariable, Value)
+
+ggplot(DV,aes(x=ExpVariable,y=Value, fill=Value)) +
+  geom_bar(stat = "identity") +
+  scale_fill_brewer() +
+  labs(x= "Variable",
+       y= "Frequency",
+       ) +
+  theme_bw()
+
+```
+
+This bar chart shows how often different environmental factors are
+reported, with the vertical axis representing frequency and the
+horizontal axis listing the factors: Degradation, Exploitation, IAS
+(Invasive Alien Species), Loss, Other, Pollution, and Unknown. The
+colors indicate whether each factor is present (darker shade for Yes) or
+absent (lighter shade for No). This visualization allows a quick
+interpretation into which factors are most commonly reported.
 
 # Statistical Modeling
 
@@ -462,12 +574,33 @@ numbered starting from 1. In the first column, replace the "-" with a
 ### Original Dataset Preview
 
 ```{r}
-kable(head(data2, 10))
+kable(head(data, 10))
 ```
 
-### Encoding Dataset Prview
+### Encoding Dataset Preview
 
 ```{r, warning=FALSE, echo=TRUE}
+EncDF <- data
+EncDF <- data %>% select(LF,GF,Biomes,Status,Range,
+                Habitat_degradation,Habitat_loss,IAS,Other,
+                  Over_exploitation,Pollution,Unknown,Group)
+EncDF <- EncDF %>% 
+            mutate(across(c(
+              "Group","LF","GF","Biomes","Status","Range",
+              "Habitat_degradation","Habitat_loss","IAS",
+              "Other","Over_exploitation","Pollution",
+              "Unknown"),as_factor))
+EncDF <- EncDF %>% 
+            mutate_at(c("Group","LF","GF","Biomes",
+           "Status","Range","Habitat_degradation",
+           "Habitat_loss","IAS","Other",
+           "Over_exploitation","Pollution","Unknown"),
+           as.numeric)
+EncDF <- EncDF %>% mutate(across(c("LF","IAS","Other","Over_exploitation",                        "Pollution","Unknown"),function (x) x-1))
+
+
+process <- as_tibble(gsheet2tbl("https://docs.google.com/spreadsheets/d/1MWhUji9lXGUf2boK3ALt31Fb6pwIluA5fFj-zT0yKbo/edit#gid=1072161265"))
+kable(head(process, 10))
 ```
 
 Split the dataset into a training set and a test set with a ratio of
@@ -475,42 +608,116 @@ Split the dataset into a training set and a test set with a ratio of
 library, aiming for an equal data quantity among classes, represented as
 1:1:1.
 
-Given a minority class sample point x, we find its k nearest neighbors.
-Then, we randomly select one of these neighbors, denoted as z, and
-construct a new data point y that lies on the line segment between x and
-z:
+Given a minority class sample point $x$, we find its $k$ nearest
+neighbors. Then, one neighbor is randomly selected, denoted as $z$, and
+a new data point $y$ is constructed which lies on the line segment
+between $x$ and $z$:
 
-> y = x + λ \* (z - x)
+$y = x + \lambda * (z - x)$
 
-Here, λ is a random number between 0 and 1.
+Here, $\lambda$ is a random number between 0 and 1.
 
-#### Tuning
+### Data Processing
 
-An approach which considers hyperparameters and involves tuning the
-number of candidate variables to select from at each split. However,
-there are a few additional hyperparameters that we should be aware of.
-Although the argument names may differ across packages, these
-hyperparameters should be present:
-
--   ntree: number of trees
-    -   We want enough trees to stabilize the error.
--   mtry: number of variables to randomly sample as candidates at each
-    split
-    -   When mtry = *p*, this is similar to bagging.
-    -   When mtry = 1, the split variable is random.
-    -   A common suggestion is to start with 5 values evenly spaced
-        across the range from 2 to *p*.
--   sampsize: number of samples
--   nodesize: minimum number of samples within the terminal nodes
-    -   Controls complexity
--   maxnodes: maximum number of terminal nodes
-    -   More nodes results in deeper, more complex trees, while fewer
-        nodes produce shallower trees.
+1.  Process the data by setting the first 14 columns as \[features\] and
+    the last column as the \[label\]
+2.  Split the dataset into training and testing sets
+3.  Combine the training datasets
+4.  Print the initial number of each category
 
 ```{r}
 
+data <- process
+features <- data[, 1:14]
+label <- data[, 15]
+
+set.seed(42)
+
+split <- sample.split(label, SplitRatio = 0.7)
+features_train = features[split,]
+features_test = features[!split,]
+label_train = label[split]
+label_test = label[!split]
+
+data_train <- features_train
+data_train$label <- label_train
+class_counts <- table(data_train$label)
+
+class_counts <- table(data_train$label)
 
 ```
+
+#### Class Balancing
+
+1.  Process classes A and B
+2.  Process classes A and C
+3.  Retain records in data_train_AB_resampled where the label is '2'
+4.  Retain records in data_train_AC_resampled where the label is '3'
+5.  Retain records in both data_train_AB_resampled and
+    data_train_AC_resampled where the label is '1'
+6.  Combine
+7.  Print the number of each category after class imbalance handling
+
+Group Counts Pre-Balancing: 490 148  23
+
+Group Counts Post-Balancing: 490 490 490
+
+#### Normalization
+
+1.  Divide the features and label, and apply different normalization to
+    the training and testing sets
+2.  Apply Min-Max normalization to features_train and features_test
+3.  Apply Z-Score normalization to each column of features_train
+4.  Apply Max Absolute Value normalization to the training set
+5.  Apply L1 norm normalization to the training set
+6.  Apply L2 norm normalization to the training set
+
+#### Training dataset
+
+1.  Training dataset after Min-Max normalization
+2.  Training dataset after Z-Score normalization
+3.  Training dataset after Max Absolute Value normalization
+4.  Training dataset after L1 norm normalization
+5.  Training dataset after L2 norm normalization
+
+#### Training Steps for Each Model
+
+1.  Calculate and print the accuracy of the test set
+2.  Convert to a categorical variable
+3.  Obtain the confusion matrix
+4.  Calculate the average recall rate (Sensitivity)
+5.  Calculate the average precision rate (Positive Predictive Value)
+6.  Print results
+
+#### MinMax Model
+
+#### ZScore Model
+
+#### Max Absolute Value Model
+
+#### L1 Normalization Model
+
+#### L2 Normalization Model
+
+#### Prediction
+
+1.  Obtain the number of predicted results
+2.  Initialize an empty vector to store the final prediction results
+3.  Iterate over each test sample
+4.  Get the prediction results of the five models for the i-th sample
+5.  Select the most frequently predicted class as the final prediction
+    result for the i-th sample
+6.  Now final_pred contains the prediction results after voting
+7.  Calculate and print the accuracy
+8.  Convert to a factor type
+9.  Obtain the confusion matrix
+10. Calculate the recall (Sensitivity) for each category
+11. Calculate the precision for each category
+
+
+
+#### Confusion Matrix
+
 
 ## Conclusion
 
@@ -537,7 +744,3 @@ in a deeper understanding of the ecological role and value of South
 African plant species.
 
 ## References
-
-[@biau2012analysis; @biau2016random; @IUCN2023; @liaw2002classification;
-@lingjun2019random; @SANBI2021; @segal2004machine; @van2023species;
-@vanderColff2023]
