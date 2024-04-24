@@ -21,6 +21,8 @@ The goal of this project is to use advanced machine learning techniques and crit
 ## Presentation Link:
 [Quarto Slides](https://raymondfleming.github.io/RandomForestPresentation/#/title-slide)
 
+![image](https://github.com/kdm92817/STA6257_Project_RandomForest/assets/133894825/27f8c1b4-56b3-4f33-8adb-a8b519546a07)
+
 ![](rf.png)
 
 ## Tools
