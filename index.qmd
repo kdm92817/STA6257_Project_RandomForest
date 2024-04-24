@@ -17,6 +17,7 @@ editor:
     wrap: 72
 ---
 
+
 ## Introduction
 
 ### What is random forest?
@@ -340,7 +341,7 @@ The table [@vanderColff2023] below organizes and summarizes the
 explanatory variables.
 
 | Class                  | Predictor Variables | Description                                                                                                                                                                                                                                                             |
-|------------------------|---------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|---------------|---------------|-------------------------------------------|
 | **Human pressures**    | Habitat loss        | Conversion, fragmentation, and/or elimination of habitat. e.g., logging, wood harvesting, livestock farming, urban development.                                                                                                                                         |
 |                        | Habitat degradation | Alteration of natural habitats necessary for species survival resulting in reduced functionality e.g., fire suppression, droughts.                                                                                                                                      |
 |                        | Invasive species    | Impacts of alien species on natives through different mechanisms e.g. alteration of soil chemistry, resource competition.                                                                                                                                               |
@@ -536,3 +537,7 @@ in a deeper understanding of the ecological role and value of South
 African plant species.
 
 ## References
+
+[@biau2012analysis; @biau2016random; @IUCN2023; @liaw2002classification;
+@lingjun2019random; @SANBI2021; @segal2004machine; @van2023species;
+@vanderColff2023]
