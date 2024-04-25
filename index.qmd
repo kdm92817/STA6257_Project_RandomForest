@@ -117,11 +117,44 @@ series of questions, such as those with a yes or no response or will a
 coin flip come up heads or tails. They do this to split the data and
 minimize the variance for the target variable.
 
+```{r}
+library(readr)
+library(plyr)
+library(ipred)
+library(caret)
+library(caTools)
+library(randomForest)
+library(ROSE)
+library(ggplot2)
+library(knitr)
+library(rsample)     
+library(dplyr)       
+library(rpart)       
+library(rpart.plot)  
+library(ipred)      
+library(caret)      
+library(readr)
+ 
+dataP2 <- read_csv("process.csv")
+dataP2 <- as.data.frame(dataP2)
+set.seed(123)
+split2 <- sample.split(dataP2, SplitRatio = 0.7) 
+species_train <- subset(dataP2, split2 == "TRUE") 
+species_test <- subset(dataP2, split2 == "FALSE")
+m3 <- rpart(
+  formula = Group~ LF + GF + Biomes + Range +
+    Habitat_degradation + Habitat_loss + IAS +
+    Other + Unknown + Other + Over_exploitation,
+  data    = species_train,
+  method  = "anova"
+)
+rpart.plot(m3)
+
+```
+
 Decision trees in random forest work together to create a robust and
 accurate model by leveraging the diversity and averaging multiple
 decision trees.
-
-![](images/image-1963384308.png)
 
 When evaluating the quality of the splits in decision trees, several
 metrics are considered.
@@ -365,43 +398,14 @@ The table below organizes and summarizes the explanatory variables.
 
 #### The preview of the dataset
 
-```{r}
-library(caret)
-library(caTools)
-library(corrplot)
-library(DescTools)
-library(dplyr)
-library(dslabs)
-library(fastDummies)
-library(ggcorrplot)
-library(ggthemes)
-library(ggplot2)
-library(gridExtra)
-library(gsheet)
-library(gtsummary)
-library(ipred)
-library(knitr)
-library(lessR)
-library(magrittr)
-library(plyr)
-library(randomForest)
-library(readr)
-library(ROSE)
-library(rpart)       
-library(rpart.plot)  
-library(rsample)     
-library(splitTools)
-library(tidyverse)
-library(vip)
-library(visreg)
+```{r, warning=FALSE, echo=T, message=FALSE}
 
-
-data <- as_tibble(gsheet2tbl("https://docs.google.com/spreadsheets/d/1BJui4r7xoVY6e3z2-IgCr_eBn7SvNAQ4BEpPo1GILNU/edit?usp=sharing"))
+data <- read.csv("All_threat_data.csv")
 
 ggplot(data, aes(x = factor(Status), fill = factor(Status))) + 
   geom_bar(show.legend = FALSE) +
   scale_fill_brewer(palette = "Paired") +
-  labs(title = "Distribution of Species by Conservation Status", 
+  labs(title = "Barplot of Status", 
        x = "Status", 
        y = "Frequency") +
   theme_minimal() +
@@ -411,7 +415,6 @@ ggplot(data, aes(x = factor(Status), fill = factor(Status))) +
         axis.text.x = element_text(angle = 45, hjust = 1),
         panel.grid.major = element_line(color = "grey80"),
         panel.grid.minor = element_blank())
-
 ```
 
 The bar plot provides an overview of frequency for each species by
@@ -437,9 +440,9 @@ enhance the reliability and validity of our analytical outcomes.
 
 ```{r}
 
-train<-data
+train<-read.csv("All_threat_data.csv")
 corrDF <- train %>% mutate(Range=ntile(Range, n=20))
-corrDF <- corrDF %>% select(!Group) %>% mutate(across(c("Group","LF","GF","Range",
+corrDF <- corrDF %>% select(!GenSpec) %>% mutate(across(c("Group","LF","GF","Range",
                                      "Biomes","Range","Habitat_degradation",
                                      "Habitat_loss","IAS","Other",
                                      "Over_exploitation","Pollution","Unknown"),
@@ -574,33 +577,33 @@ numbered starting from 1. In the first column, replace the "-" with a
 ### Original Dataset Preview
 
 ```{r}
-kable(head(data, 10))
+original_data <- read_csv("All_threat_data.csv")
+kable(head(original_data, 10))
 ```
 
 ### Encoding Dataset Preview
 
 ```{r, warning=FALSE, echo=TRUE}
-EncDF <- data
-EncDF <- data %>% select(LF,GF,Biomes,Status,Range,
-                Habitat_degradation,Habitat_loss,IAS,Other,
-                  Over_exploitation,Pollution,Unknown,Group)
+EncDF <- read.csv("All_threat_data.csv")
+
+EncDF <- data %>% select(GenSpec,LF,GF,Fam,Biomes,Status,Range,
+                         Habitat_degradation,Habitat_loss,IAS,Other,
+                         Over_exploitation,Pollution,Unknown,Group)
 EncDF <- EncDF %>% 
             mutate(across(c(
-              "Group","LF","GF","Biomes","Status","Range",
-              "Habitat_degradation","Habitat_loss","IAS",
-              "Other","Over_exploitation","Pollution",
-              "Unknown"),as_factor))
+              "GenSpec","Group","LF","GF","Fam","Biomes","Status","Range",
+              "Habitat_degradation","Habitat_loss", "IAS","Other",
+              "Over_exploitation","Pollution","Unknown"),as_factor))
 EncDF <- EncDF %>% 
-            mutate_at(c("Group","LF","GF","Biomes",
-           "Status","Range","Habitat_degradation",
-           "Habitat_loss","IAS","Other",
-           "Over_exploitation","Pollution","Unknown"),
-           as.numeric)
-EncDF <- EncDF %>% mutate(across(c("LF","IAS","Other","Over_exploitation",                        "Pollution","Unknown"),function (x) x-1))
+            mutate_at(c("GenSpec","Group","LF","GF","Fam","Biomes",
+                        "Status","Range","Habitat_degradation","Habitat_loss", 
+                        "IAS","Other","Over_exploitation","Pollution","Unknown")
+                      ,as.numeric)
+EncDF <- EncDF %>% mutate(across(c("LF","Fam","IAS","Other","Over_exploitation",
+                                   "Pollution","Unknown"),function (x) x-1))
 
-
-process <- as_tibble(gsheet2tbl("https://docs.google.com/spreadsheets/d/1MWhUji9lXGUf2boK3ALt31Fb6pwIluA5fFj-zT0yKbo/edit#gid=1072161265"))
-kable(head(process, 10))
+encode_data <- read_csv("process.csv")
+kable(head(encode_data, 10))
 ```
 
 Split the dataset into a training set and a test set with a ratio of
@@ -627,7 +630,8 @@ Here, $\lambda$ is a random number between 0 and 1.
 
 ```{r}
 
-data <- process
+data <- read.csv("process.csv")
+
 features <- data[, 1:14]
 label <- data[, 15]
 
@@ -645,6 +649,7 @@ class_counts <- table(data_train$label)
 
 class_counts <- table(data_train$label)
 
+
 ```
 
 #### Class Balancing
@@ -658,9 +663,30 @@ class_counts <- table(data_train$label)
 6.  Combine
 7.  Print the number of each category after class imbalance handling
 
-Group Counts Pre-Balancing: 490 148  23
+```{r}
 
-Group Counts Post-Balancing: 490 490 490
+data_train_AB <- data_train
+data_train_AB <- data_train_AB[data_train_AB$label != '3',]
+data_train_AB_resampled <- ovun.sample(label ~ ., data = data_train_AB, 
+                                       method = "over", N = 980, seed = 1)$data
+
+data_train_AC <- data_train
+data_train_AC <- data_train_AC[data_train_AC$label != '2',]
+data_train_AC_resampled <- ovun.sample(label ~ ., data = data_train_AC, 
+                                       method = "over", N = 980, seed = 1)$data
+
+data_train_AB_2 <- data_train_AB_resampled[data_train_AB_resampled$label == '2',]
+data_train_AC_3 <- data_train_AC_resampled[data_train_AC_resampled$label == '3',]
+
+data_train_1 <- data_train_AB_resampled[data_train_AB_resampled$label == '1',]
+data_train_combined <- rbind(data_train_1, data_train_AB_2, data_train_AC_3)
+
+
+cat("Group Counts Pre-Balancing:  ", 
+    table(data_train$label),
+    "\nGroup Counts Post-Balancing: ", 
+    table(data_train_combined$label))
+```
 
 #### Normalization
 
@@ -672,6 +698,39 @@ Group Counts Post-Balancing: 490 490 490
 5.  Apply L1 norm normalization to the training set
 6.  Apply L2 norm normalization to the training set
 
+```{r}
+features_train <- data_train_combined[, 1:14]
+label <- data_train_combined[, 15]
+```
+
+```{r}
+trainMM <- as.data.frame(lapply(features_train, 
+                      function(x) {(x-min(x))/(max(x)-min(x))}))
+testMM <- as.data.frame(lapply(features_test, 
+                      function(x) {(x-min(x))/(max(x)-min(x))}))
+
+TrainZS <- as.data.frame(lapply(features_train, 
+                      function(x) {(x - mean(x))/sd(x)}))
+TestZS <- as.data.frame(lapply(features_test, 
+                      function(x) {(x - mean(x))/sd(x)}))
+
+TrainMAV <- as.data.frame(lapply(features_train, 
+                       function(x) {x / max(abs(x))}))
+TestMAV <- as.data.frame(lapply(features_test, 
+                        function(x) {x / max(abs(x))}))
+
+trainL1 <- as.data.frame(lapply(features_train, 
+                       function(x) {x / sum(abs(x))}))
+TestL1 <- as.data.frame(lapply(features_test, 
+                       function(x) {x / sum(abs(x))}))
+
+TrainL2 <- as.data.frame(lapply(features_train, 
+                       function(x) {x / sqrt(sum(x^2))}))
+TestL2 <- as.data.frame(lapply(features_test, 
+                       function(x) {x / sqrt(sum(x^2))}))
+
+```
+
 #### Training dataset
 
 1.  Training dataset after Min-Max normalization
@@ -679,6 +738,28 @@ Group Counts Post-Balancing: 490 490 490
 3.  Training dataset after Max Absolute Value normalization
 4.  Training dataset after L1 norm normalization
 5.  Training dataset after L2 norm normalization
+
+```{r}
+MMModel <- trainMM
+MMModel$label <- label
+MMCounts <- table(MMModel$label)
+
+ZSModel <- TrainZS
+ZSModel$label <- label
+ZSCounts <- table(ZSModel$label)
+
+MAVModel <- TrainMAV
+MAVModel$label <- label
+MAVCounts <- table(MAVModel$label)
+
+L1Model <- trainL1
+L1Model$label <- label
+L1Counts <- table(L1Model$label)
+
+L2Model <- TrainL2
+L2Model$label <- label
+L2Counts <- table(L2Model$label)
+```
 
 #### Training Steps for Each Model
 
@@ -691,13 +772,142 @@ Group Counts Post-Balancing: 490 490 490
 
 #### MinMax Model
 
+```{r}
+MM <- randomForest(x = MMModel[-ncol(data_train_combined)],
+                        y = as.factor(MMModel$label), ntree = 6)
+importanceMM = importance(MM)
+PredMM <- predict(MM, testMM)
+accuracy <- sum(label_test == PredMM) / length(label_test)
+TestFactorMM <- as.factor(label_test)
+PredFactorMM <- as.factor(PredMM)
+cm <- confusionMatrix(PredFactorMM, TestFactorMM)
+rownames(cm$byClass)<-c("NotThr","Thr","Ext")
+recall <- mean(c(cm$byClass["NotThr", "Sensitivity"], 
+                 cm$byClass["Thr", "Sensitivity"], 
+                 cm$byClass["Ext", "Sensitivity"]),na.rm=TRUE)
+precision <- mean(c(cm$byClass["NotThr", "Pos Pred Value"], 
+                    cm$byClass["Thr", "Pos Pred Value"], 
+                    cm$byClass["Ext", "Pos Pred Value"]),na.rm=TRUE)
+F1 = 2 * recall * precision / ( recall + precision )
+printTable=matrix(c(round(accuracy,2),round(recall,2),
+                    round(precision,2),round(F1,2)),
+                  ncol=1,byrow=TRUE)
+colnames(printTable)=c('Score')
+rownames(printTable)=c('Accuracy','Recall',
+                       'Precision','F1')
+print(printTable)
+```
+
 #### ZScore Model
+
+```{r}
+ZS <- randomForest(x = ZSModel[-ncol(data_train_combined)],
+                      y = as.factor(ZSModel$label), ntree = 6)
+ImportanceZS = importance(ZS)
+PredZS <- predict(ZS, TestZS)
+accuracy <- sum(label_test == PredZS) / length(label_test)
+TestFactorZS <- as.factor(label_test)
+PredFactorZS <- as.factor(PredZS)
+cm <- confusionMatrix(PredFactorZS, TestFactorZS)
+recall <- mean(c(cm$byClass["Class: 1", "Sensitivity"],
+                              cm$byClass["Class: 2", "Sensitivity"],
+                              cm$byClass["Class: 3", "Sensitivity"]),na.rm=TRUE)
+
+precision <- mean(c(cm$byClass["Class: 1", "Pos Pred Value"],
+                            cm$byClass["Class: 2", "Pos Pred Value"],
+                            cm$byClass["Class: 3", "Pos Pred Value"]),na.rm=TRUE)
+F1 = 2 * recall * precision / ( recall + precision )
+printTable=matrix(c(round(accuracy,2),round(recall,2),
+                    round(precision,2),round(F1,2)),
+                  ncol=1,byrow=TRUE)
+colnames(printTable)=c('Score')
+rownames(printTable)=c('Accuracy','Recall','Precision','F1')
+print(printTable)
+```
 
 #### Max Absolute Value Model
 
+```{r}
+MAV <- randomForest(x = MAVModel[-ncol(data_train_combined)], 
+                        y = as.factor(MAVModel$label), 
+                        ntree = 6)
+ImportanceMAV = importance(MAV)
+PredMAV <- predict(MAV, TestMAV)
+accuracy <- sum(label_test == PredMAV) / length(label_test)
+TestFactorMAV <- as.factor(label_test)
+PredFactorMAV <- as.factor(PredMAV)
+cm <- confusionMatrix(PredFactorMAV, TestFactorMAV)
+recall <- mean(c(cm$byClass["Class: 1", "Sensitivity"],
+                 cm$byClass["Class: 2", "Sensitivity"],
+                 cm$byClass["Class: 3", "Sensitivity"]),na.rm=TRUE)
+precision <- mean(c(cm$byClass["Class: 1", "Pos Pred Value"],
+                 cm$byClass["Class: 2", "Pos Pred Value"],
+                 cm$byClass["Class: 3", "Pos Pred Value"]),na.rm=TRUE)
+F1 = 2 * recall * precision / ( recall + precision )
+printTable=matrix(c(round(accuracy,2),round(recall,2),
+                    round(precision,2),round(F1,2)),
+                  ncol=1,byrow=TRUE)
+colnames(printTable)=c('Score')
+rownames(printTable)=c('Accuracy','Recall','Precision','F1')
+print(printTable)
+```
+
 #### L1 Normalization Model
 
-#### L2 Normalization Model
+```{r}
+L1 <- randomForest(x = L1Model[-ncol(data_train_combined)], 
+                        y = as.factor(L1Model$label), ntree = 6)
+L1Importance = importance(L1)
+PredL1 <- predict(L1, TestL1)
+accuracy <- sum(label_test == PredL1) / length(label_test)
+TestFactorL1 <- as.factor(label_test)
+PredFactorL1 <- as.factor(PredL1)
+cm <- confusionMatrix(PredFactorL1, TestFactorL1)
+recall <- mean(c(cm$byClass["Class: 1", "Sensitivity"],
+                              cm$byClass["Class: 2", "Sensitivity"],
+                              cm$byClass["Class: 3", "Sensitivity"]),na.rm=TRUE)
+precision <- mean(c(cm$byClass["Class: 1", "Pos Pred Value"],
+                            cm$byClass["Class: 2", "Pos Pred Value"],
+                            cm$byClass["Class: 3", "Pos Pred Value"]),na.rm=TRUE)
+F1 = 2 * recall * precision / ( recall + precision )
+printTable=matrix(c(round(accuracy,2),round(recall,2),
+                    round(precision,2),round(F1,2)),
+                    ncol=1,byrow=TRUE)
+colnames(printTable)=c('Score')
+rownames(printTable)=c('Accuracy','Recall','Precision','F1')
+print(printTable)
+```
+
+##### L2 Normalization Model
+
+```{r}
+L2 <- randomForest(x = L2Model[-ncol(data_train_combined)], 
+                        y = as.factor(L2Model$label), ntree = 6)
+L2Importance = importance(L2)
+PredL2 <- predict(L2, TestL2)
+accuracy <- sum(label_test == PredL2) / length(label_test)
+TestFactorL2 <- as.factor(label_test)
+PredFactorL2 <- as.factor(PredL2)
+cm <- confusionMatrix(PredFactorL2, TestFactorL2)
+
+recall <- mean(c(cm$byClass["Class: 1", "Sensitivity"],
+                 cm$byClass["Class: 2", "Sensitivity"],
+                 cm$byClass["Class: 3", "Sensitivity"]),na.rm=TRUE)
+
+precision <- mean(c(cm$byClass["Class: 1", "Pos Pred Value"],
+                 cm$byClass["Class: 2", "Pos Pred Value"],
+                 cm$byClass["Class: 3", "Pos Pred Value"]),na.rm=TRUE)
+
+F1 = 2 * recall * precision / ( recall + precision )
+
+printTable=matrix(c(round(accuracy,2),round(recall,2),
+                    round(precision,2),round(F1,2)),ncol=1,
+                    byrow=TRUE)
+colnames(printTable)=c('Score')
+rownames(printTable)=c('Accuracy','Recall','Precision','F1')
+
+print(printTable)
+```
 
 #### Prediction
 
@@ -714,10 +924,129 @@ Group Counts Post-Balancing: 490 490 490
 10. Calculate the recall (Sensitivity) for each category
 11. Calculate the precision for each category
 
+```{r}
+n <- length(PredMM)
+final_pred <-rep(NA, n)
+for(i in 1:n) {
+   preds <- c(PredMM[i], PredZS[i], PredMAV[i],
+              PredL1[i], PredL2[i])
+   final_pred[i] <-as.numeric(names(
+                    which.max(table(preds))))
+}
 
+accuracy <-sum(label_test == final_pred)/
+            length(label_test)
+
+final_pred_factor<-as.factor(final_pred)
+label_test_factor<-as.factor(label_test)
+cm_vote <-confusionMatrix(final_pred_factor,
+                          label_test_factor)
+rownames(cm_vote$byClass)<-c("NotThr","Thr","Ext")
+sensitivity_class1<-cm_vote$byClass["NotThr", "Sensitivity"]
+sensitivity_class2<-cm_vote$byClass["Thr", "Sensitivity"]
+sensitivity_class3<-cm_vote$byClass["Ext",  "Sensitivity"]
+recall =(sensitivity_class1+sensitivity_class2+
+           sensitivity_class3)/3
+
+precision_class1<-cm_vote$byClass["NotThr",  "Pos Pred Value"]
+precision_class2<-cm_vote$byClass["Thr",  "Pos Pred Value"]
+precision_class3<-cm_vote$byClass["Ext", "Pos Pred Value"]
+precision=(precision_class1+precision_class2+
+             precision_class3)/3
+
+F1=2*recall*precision/(recall+precision)
+
+printTable=matrix(c(round(accuracy,2),
+                    round(recall,2),
+                    round(precision,2),
+                    round(F1,2)),ncol=1,
+                    byrow=TRUE)
+colnames(printTable)=c('Score')
+rownames(printTable)=c('Accuracy','Recall','Precision','F1')
+print(printTable)
+
+```
+
+```{r}
+ctrl <- trainControl(method = "cv",  number = 10) 
+
+bagged_cv <- train(
+  Group~ LF + GF + Biomes + Range +
+    Habitat_degradation + Habitat_loss + IAS +
+    Other + Unknown + Other + Over_exploitation,
+  data    = species_train,
+  method = "treebag",
+  trControl = ctrl,
+  importance = TRUE
+)
+ 
+plot(varImp(bagged_cv), 10) 
+```
 
 #### Confusion Matrix
 
+```{r}
+cm_vote <- confusionMatrix(final_pred_factor, label_test_factor)
+ 
+library(ggplot2) 	
+library(grid)
+library(gridExtra)       	
+library(likert)
+
+cm_vote <- confusionMatrix(final_pred_factor, label_test_factor)
+ 
+cm <- confusionMatrix(final_pred_factor, label_test_factor)
+
+cm_d <- as.data.frame(cm$table)
+cm_st <-data.frame(cm$overall)
+cm_st$cm.overall <- round(cm_st$cm.overall,2)
+cm_d$diag <- cm_d$Prediction == cm_d$Reference
+cm_d$ndiag <- cm_d$Prediction != cm_d$Reference     
+cm_d[cm_d == 0] <- NA
+cm_d$Reference <-  reverse.levels(cm_d$Reference)
+cm_d$ref_freq <- cm_d$Freq * ifelse(is.na(cm_d$diag),-1,1) 
+ 
+plt1 <-  ggplot(data = cm_d, aes(x = Prediction , y =  Reference, 
+                                 fill = Freq))+
+  scale_x_discrete(position = "top") +
+  geom_tile( data = cm_d,aes(fill = ref_freq)) +
+  scale_fill_gradient2(guide = FALSE ,low="red",high="mediumvioletred", 
+                       mid= "mistyrose",
+                   	midpoint = 0,na.value = 'white') +
+  geom_text(aes(label = Freq), color = 'black', size = 3)+
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+    	legend.position = "none",
+    	panel.border = element_blank(),
+    	plot.background = element_blank(),
+    	axis.line = element_blank(),
+  )
+plt2 <-  tableGrob(cm_st)
+
+printTable=matrix(c(round(cm$overall['Accuracy'],2),
+                    round(cm$overall['Kappa'],2),
+                    paste("(",round(cm$overall['AccuracyLower'],2),
+                          ",",round(cm$overall['AccuracyUpper'],2),
+                          ")",sep=""),
+                    round(cm$overall['AccuracyNull'],2),
+                    if(cm$overall['AccuracyPValue']<0.001){"<.001"}
+                    else round(cm$overall['AccuracyPValue'],3)),
+                    ncol=1,
+                    byrow=TRUE)
+colnames(printTable)=c('Score')
+rownames(printTable)=c('Accuracy','Kappa','95% CI','AccuracyNull','Accuracy p-value')
+
+
+grid.arrange(plt1, nrow = 1, ncol = 1,
+         	top=textGrob("Confusion Matrix",gp=gpar(fontsize=25,font=1)))
+print(printTable,quote=FALSE)
+
+cmBC<-cm$byClass
+rownames(cmBC)<-c("NotThr","Thr","Ext")
+print(t(round(cmBC,2)),quote=FALSE)
+
+
+```
 
 ## Conclusion
 
@@ -729,10 +1058,10 @@ overfitting. The algorithm incorporates versatility in its capabilities
 for classification and regression tasks, handling missing data, and
 displaying robustness when faced with outliers and noisy data.
 
-We produced a predictive model with 88% accuracy, indicating that our
+We produced a predictive model with 93% accuracy, indicating that our
 explanatory variables were able to differentiate between non threatened,
 threatened, and extinct taxa. Extinct species were classified with 100%
-specificity and 70% sensitivity. Most extinctions were perennial shrubs
+specificity and 80% sensitivity. Most extinctions were perennial shrubs
 found in the Cape Floristic Region, a global biodiversity hotspot. As
 range was the strongest predictor of extinction, many of the recorded
 taxa deemed susceptible were range-restricted. Habitat loss is presented
