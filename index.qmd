@@ -135,7 +135,7 @@ library(ipred)
 library(caret)      
 library(readr)
  
-dataP2 <- read_csv("process.csv")
+dataP2 <- read.csv("process.csv")
 dataP2 <- as.data.frame(dataP2)
 set.seed(123)
 split2 <- sample.split(dataP2, SplitRatio = 0.7) 
